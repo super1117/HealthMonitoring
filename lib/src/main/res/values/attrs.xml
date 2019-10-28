@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--banner-->
+    <declare-styleable name="BGABanner">
+        <!-- 指示点容器背景 -->
+        <attr name="banner_pointContainerBackground" format="reference|color"/>
+        <!-- 指示点背景 -->
+        <attr name="banner_pointDrawable" format="reference"/>
+        <!-- 指示点容器左右内间距 -->
+        <attr name="banner_pointContainerLeftRightPadding" format="dimension"/>
+        <!-- 指示点上下外间距 -->
+        <attr name="banner_pointTopBottomMargin" format="dimension"/>
+        <!-- 指示点左右外间距 -->
+        <attr name="banner_pointLeftRightMargin" format="dimension"/>
+        <!-- 指示器的位置 -->
+        <attr name="banner_indicatorGravity">
+            <flag name="top" value="0x30"/>
+            <flag name="bottom" value="0x50"/>
+            <flag name="left" value="0x03"/>
+            <flag name="right" value="0x05"/>
+            <flag name="center_horizontal" value="0x01"/>
+        </attr>
+        <!-- 是否开启自动轮播 -->
+        <attr name="banner_pointAutoPlayAble" format="boolean"/>
+        <!-- 自动轮播的时间间隔 -->
+        <attr name="banner_pointAutoPlayInterval" format="integer"/>
+        <!-- 页码切换过程的时间长度 -->
+        <attr name="banner_pageChangeDuration" format="integer"/>
+        <!-- 页面切换的动画效果 -->
+        <attr name="banner_transitionEffect" format="enum">
+            <enum name="defaultEffect" value="0"/>
+            <enum name="alpha" value="1"/>
+            <enum name="rotate" value="2"/>
+            <enum name="cube" value="3"/>
+            <enum name="flip" value="4"/>
+            <enum name="accordion" value="5"/>
+            <enum name="zoomFade" value="6"/>
+            <enum name="fade" value="7"/>
+            <enum name="zoomCenter" value="8"/>
+            <enum name="zoomStack" value="9"/>
+            <enum name="stack" value="10"/>
+            <enum name="depth" value="11"/>
+            <enum name="zoom" value="12"/>
+        </attr>
+        <!-- 提示文案的文字颜色 -->
+        <attr name="banner_tipTextColor" format="reference|color"/>
+        <!-- 提示文案的文字大小 -->
+        <attr name="banner_tipTextSize" format="dimension"/>
+        <!-- 加载网络数据时覆盖在 BGABanner 最上层的占位图 -->
+        <attr name="banner_placeholderDrawable" format="reference"/>
+        <!-- 是否是数字指示器 -->
+        <attr name="banner_isNumberIndicator" format="boolean"/>
+        <!-- 数字指示器文字颜色 -->
+        <attr name="banner_numberIndicatorTextColor" format="reference|color"/>
+        <!-- 数字指示器文字大小 -->
+        <attr name="banner_numberIndicatorTextSize" format="dimension"/>
+        <!-- 数字指示器背景 -->
+        <attr name="banner_numberIndicatorBackground" format="reference"/>
+        <!-- 当只有一页数据时是否显示指示器，默认值为 false -->
+        <attr name="banner_isNeedShowIndicatorOnOnlyOnePage" format="boolean"/>
+        <!-- 自动轮播区域距离 BGABanner 底部的距离 -->
+        <attr name="banner_contentBottomMargin" format="dimension"/>
+        <!-- 占位图缩放模式 -->
+        <attr name="android:scaleType"/>
+    </declare-styleable>
+    <!--floatingactionbutton-->
+    <declare-styleable name="FabTagLayout">
+        <attr name="tagText" format="string" />
+        <!--<attr name="tagTextSize" format="dimension" />-->
+        <!--<attr name="tagTextColor" format="color" />-->
+    </declare-styleable>
+    <attr name="animationMode">
+        <enum name="fade" value="0"></enum>
+        <enum name="Scale" value="1"></enum>
+        <enum name="bounce" value="2"></enum>
+    </attr>
+    <attr name="position">
+        <enum name="left_top" value="0"></enum>
+        <enum name="left_bottom" value="1"></enum>
+        <enum name="right_top" value="2"></enum>
+        <enum name="right_bottom" value="3"></enum>
+    </attr>
+    <declare-styleable name="FloatingActionButtonPlus">
+        <attr name="animationMode"></attr>
+        <attr name="position"></attr>
+        <attr name="mBackgroundColor" format="color"></attr>
+        <attr name="switchFabIcon" format="reference"></attr>
+        <attr name="switchFabColor" format="color"></attr>
+        <attr name="animationDuration" format="integer"></attr>
+    </declare-styleable>
+    <!--bubble-->
+    <declare-styleable name="bubble">
+        <attr name="shadowColor" format="color" />
+        <attr name="padding" format="dimension" />
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="halfBaseOfLeg" format="dimension" />
+    </declare-styleable>
+    <!--SWIPER refresh-->
+    <!--<declare-styleable name="SwipyRefreshLayout">-->
+        <!--<attr name="direction" format="integer" />-->
+    <!--</declare-styleable>-->
+
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <!-- {@deprecated Use civ_circlebackground_color instead.} -->
+        <attr name="civ_fill_color" format="color" />
+        <attr name="civ_circle_background_color" format="color" />
+    </declare-styleable>
+
+    <!--**************************日历****************************-->
+    <declare-styleable name="CalendarView">
+        <!--是否显示农历-->
+        <attr name="show_lunar" format="boolean" />
+        <!--是否显示上月和下月-->
+        <attr name="show_last_next" format="boolean" />
+        <!--是否显示节假日-->
+        <attr name="show_holiday" format="boolean" />
+        <!--是否显示节气-->
+        <attr name="show_term" format="boolean" />
+        <!--阳历的日期颜色-->
+        <attr name="solar_color" format="color" />
+        <!--阳历的日期尺寸-->
+        <attr name="solar_size" format="integer" />
+        <!--农历的日期颜色-->
+        <attr name="lunar_color" format="color" />
+        <!--农历的日期尺寸-->
+        <attr name="lunar_size" format="integer" />
+        <!--节日文字颜色-->
+        <attr name="holiday_color" format="color" />
+        <!--选中的日期文字颜色-->
+        <attr name="choose_color" format="color" />
+        <!--选中的日期背景-->
+        <attr name="day_bg" format="reference" />
+        <!--单选时切换月份，是否选中上次的日期-->
+        <attr name="switch_choose" format="boolean" />
+        <!--设置单选、多选-->
+        <attr name="choose_type" format="enum">
+            <enum name="single" value="0" />
+            <enum name="multi" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="WeekView">
+    <!--周的表示形式（x.x.x.x.x.x.x）-->
+    <attr name="week_str" format="string" />
+    <!--周的文字颜色-->
+    <attr name="week_color" format="color" />
+    <!--周的文字大小-->
+    <attr name="week_size" format="integer" />
+    </declare-styleable>
+    <!--**************************END****************************-->
+
+    <declare-styleable name="IconText">
+        <attr name="drawableRight" format="reference"/>
+        <attr name="drawableLeft" format="reference"/>
+        <attr name="textMarginRight" format="dimension"/>
+        <attr name="textMarginLeft" format="dimension"/>
+        <attr name="checked" format="boolean"/>
+        <attr name="checkable" format="boolean"/>
+    </declare-styleable>
+
+    <!--ratingbar-->
+    <declare-styleable name="RatingBar">
+        <!--星星间距-->
+        <attr format="dimension" name="starDistance"/>
+        <!--星星大小-->
+        <attr format="dimension" name="starSize"/>
+        <!--星星个数-->
+        <attr format="integer" name="starCount"/>
+        <!--星星空图-->
+        <attr format="reference" name="starEmpty"/>
+        <!--星星满图-->
+        <attr format="reference" name="starFill"/>
+        <!--填充个数-->
+        <attr format="float" name="starMark"/>
+        <!--是否支持触摸-->
+        <attr name="starTouchable" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="wave">
+        <!--波浪颜色 -->
+        <attr name="color" format="color" />
+        <!-- 填充模式 -->
+        <attr name="fill_mode">
+            <!-- 填充顶部，使顶部是直线，底部是波浪线 -->
+            <enum name="top" value="1" />
+            <!-- 填充底部，使底部是直线，顶部是波浪线 -->
+            <enum name="bottom" value="2" />
+        </attr>
+        <!-- 波浪变化速率，<0 向右的小伙，>0 向左的效果-->
+        <attr name="speed" format="integer" />
+        <!-- 水波浪初始状态相位角  -->
+        <attr name="phi" format="integer" />
+        <!-- 水波浪角频率，默认值 1，显示一个三角函数周期  -->
+        <attr name="omega" format="float"/>
+    </declare-styleable>
+
+    <declare-styleable name="NineGridImageView">
+        <attr format="dimension" name="singleImgSize"/>
+        <attr format="dimension" name="imgGap"/>
+        <attr format="integer" name="maxSize"/>
+        <attr format="enum" name="showStyle">
+            <enum name="grid" value="0"/>
+            <enum name="fill" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>

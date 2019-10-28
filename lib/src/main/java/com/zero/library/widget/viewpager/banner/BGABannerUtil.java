@@ -1,0 +1,49 @@
+package com.zero.library.widget.viewpager.banner;
+
+import android.content.Context;
+import android.view.View;
+import android.widget.ImageView;
+
+import androidx.annotation.DrawableRes;
+import androidx.core.view.ViewCompat;
+
+import java.util.List;
+
+public class BGABannerUtil {
+
+    private BGABannerUtil() {
+    }
+
+    public static ImageView getItemImageView(Context context, @DrawableRes int placeholderResId) {
+        return getItemImageView(context, placeholderResId, ImageView.ScaleType.CENTER_CROP);
+    }
+
+    public static ImageView getItemImageView(Context context, @DrawableRes int placeholderResId, ImageView.ScaleType scaleType) {
+        ImageView imageView = new ImageView(context);
+        imageView.setImageResource(placeholderResId);
+        imageView.setClickable(true);
+        imageView.setScaleType(scaleType);
+        return imageView;
+    }
+
+    public static void resetPageTransformer(List<? extends View> views) {
+        if (views == null) {
+            return;
+        }
+
+        for (View view : views) {
+            view.setVisibility(View.VISIBLE);
+            ViewCompat.setAlpha(view, 1);
+            ViewCompat.setPivotX(view, view.getMeasuredWidth() * 0.5f);
+            ViewCompat.setPivotY(view, view.getMeasuredHeight() * 0.5f);
+            ViewCompat.setTranslationX(view, 0);
+            ViewCompat.setTranslationY(view, 0);
+            ViewCompat.setScaleX(view, 1);
+            ViewCompat.setScaleY(view, 1);
+            ViewCompat.setRotationX(view, 0);
+            ViewCompat.setRotationY(view, 0);
+            ViewCompat.setRotation(view, 0);
+        }
+    }
+
+}

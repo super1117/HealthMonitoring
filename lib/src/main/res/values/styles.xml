@@ -1,0 +1,97 @@
+<resources>
+
+    <!--&lt;!&ndash; Base application theme. colorPrimaryDark&ndash;&gt;-->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+    <!--</style>-->
+
+    <!--标题栏样式-->
+    <style name="toolbar_theme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <!--设置菜单布局显示在toolbar下面-->
+    <style name="toolbarMenu">
+        <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
+    </style>
+
+    <style name="OverflowMenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>  <!--设置不覆盖锚点-->
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="android:elevation">0dp</item>
+    </style>
+z
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="toolabr" parent="Base.ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
+    <style name="ActionSheetDialogStyle" parent="@android:style/Theme.Dialog">
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- 浮于Activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- Dialog以外的区域模糊效果 -->
+        <item name="android:backgroundDimEnabled">false</item>
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
+
+    <style name="mine_btn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:drawableRight">@mipmap/iav</item>
+        <item name="android:textColor">@color/textColor</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+
+    <style name="DialogFullscreen" parent="@android:style/Theme.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/almms</item>
+        <!--@android:style/Animation.Dialog</item>-->
+    </style>
+
+    <style name="almms">
+        <item name="android:windowEnterAnimation">@anim/anim_almms_in</item>
+        <item name="android:windowExitAnimation">@anim/anim_almms_out</item>
+    </style>
+
+    <style name="ActivityEntryAnimation" parent="AppTheme">
+        <!-- 去除Activity顶部黑线 -->
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- 系统状态栏背景设置透明 -->
+        <!--<item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">@android:color/transparent</item>-->
+        <!-- Activity背景 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+        <!-- 背景模糊 -->
+        <!--<item name="android:backgroundDimEnabled">true</item>-->
+    </style>
+
+    <declare-styleable name="drawableview">
+        <attr name="drawableSize" format="dimension" />
+    </declare-styleable>
+
+</resources>
