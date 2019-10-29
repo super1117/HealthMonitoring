@@ -25,19 +25,10 @@
         tools:text="@tools:sample/full_names"
         android:layout_marginLeft="16dp"/>
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/log"
-            android:textSize="12sp"
-            android:lineSpacingExtra="3dp"
-            tools:text="@tools:sample/lorem/random"
-            android:padding="16dp"/>
-
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/rv"/>
 
 </LinearLayout>

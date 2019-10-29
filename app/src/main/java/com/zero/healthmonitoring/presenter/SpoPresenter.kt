@@ -5,6 +5,7 @@ import com.zero.healthmonitoring.delegate.SpoDelegate
 import com.zero.library.utils.PermissionManager
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import com.creative.base.BaseDate.Wave
 import com.creative.FingerOximeter.IFingerOximeterCallBack
 import com.bde.parentcyTransport.ACSUtility.blePort
@@ -81,7 +82,7 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
             when (msg.what) {
                 0 -> {
                     viewDelegate?.para?.text = msg.obj.toString()
-                    viewDelegate?.log?.append("${msg.obj} \n")
+                    Log.e("aiya", "${msg.obj} \n")
                 }
                 1 -> {
                     val wave = msg.obj as List<Wave>
@@ -92,7 +93,7 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
                         showText += w.data.toString() + "---"
                     }
                     viewDelegate?.wave?.text = showText
-                    viewDelegate?.log?.append("$showText \n")
+                    Log.e("aiya","$showText \n")
                 }
                 2 -> {
                     ble?.startDiscover()
@@ -106,7 +107,7 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
     internal inner class BleCallBack : IBLECallBack {
 
         override fun onFindDevice(port: blePort) {
-            viewDelegate?.log?.append("onFindDevice ${port._device.address} ${port._device.name} ${port.devInfo} \n")
+            Log.e("aiya","onFindDevice ${port._device.address} ${port._device.name} ${port.devInfo} \n")
             if (port._device.name.trim { it <= ' ' } == "POD") {// 将POD修改为对应的设备名即可
                 ble.stopDiscover()
                 object : Thread() {
@@ -120,7 +121,7 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
         }
 
         override fun onConnected(port: blePort) {
-            viewDelegate?.log?.append("onConnected \n")
+            Log.e("aiya","onConnected \n")
             pod = FingerOximeter(
                 BLEReader(ble), BLESender(ble),
                 FingerOximeterCallBack()
@@ -141,14 +142,14 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
         }
 
         override fun onDiscoveryCompleted(device: List<blePort>) {
-            viewDelegate?.log?.append("onDiscoveryCompleted: \n")
-            viewDelegate?.log?.append("***************************************************\n")
+            Log.e("aiya","onDiscoveryCompleted: \n")
+            Log.e("aiya","***************************************************\n")
             device?.forEach{ it ->
                 it?.apply {
-                    viewDelegate?.log?.append("* ${it.devInfo} \n")
+                    Log.e("aiya","* ${it.devInfo} \n")
                 }
             }
-            viewDelegate?.log?.append("***************************************************\n")
+            Log.e("aiya","***************************************************\n")
         }
 
         override fun onDisConnect(prot: blePort) {
@@ -158,7 +159,7 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
         }
 
         override fun onReadyForUse() {
-            viewDelegate?.log?.append("onReadyForUse \n")
+            Log.e("aiya","onReadyForUse \n")
         }
 
     }
