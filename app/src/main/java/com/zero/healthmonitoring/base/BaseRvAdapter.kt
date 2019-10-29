@@ -46,9 +46,9 @@ import java.util.ArrayList
 abstract class BaseRvAdapter<T>(private val recyclerView: RecyclerView) :
     RecyclerView.Adapter<BaseViewHolder>() {
 
-    protected var mContext: Context
+    protected var mContext: Context = this.recyclerView.context
 
-    protected var mData: MutableList<T>
+    protected var mData: MutableList<T> = ArrayList()
 
     private val inflater: LayoutInflater
 
@@ -83,8 +83,6 @@ abstract class BaseRvAdapter<T>(private val recyclerView: RecyclerView) :
         }
 
     init {
-        this.mContext = this.recyclerView.context
-        this.mData = ArrayList()
         this.inflater = LayoutInflater.from(this.mContext)
     }
 

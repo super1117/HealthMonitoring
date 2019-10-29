@@ -116,7 +116,7 @@ class BaseViewHolder(
      * 设置item中子控件的点击监听
      * @param childClickListener
      */
-    fun setOnItemChildClickListener(childClickListener: OnItemChildClickListener) {
+    fun setOnItemChildClickListener(childClickListener: OnItemChildClickListener?) {
         this.childClickListener = childClickListener
     }
 
@@ -140,7 +140,7 @@ class BaseViewHolder(
      * 设置item子控件的选中事件监听
      * @param childCheckChangeListener
      */
-    fun setOnItemChildCheckChangeListener(childCheckChangeListener: OnItemChildCheckChangeListener) {
+    fun setOnItemChildCheckChangeListener(childCheckChangeListener: OnItemChildCheckChangeListener?) {
         this.childCheckChangeListener = childCheckChangeListener
     }
 
