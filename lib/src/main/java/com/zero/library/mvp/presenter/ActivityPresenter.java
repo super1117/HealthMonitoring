@@ -46,6 +46,7 @@ public abstract class ActivityPresenter<T extends IDelegate> extends AppCompatAc
         Toolbar toolbar = this.viewDelegate.getToolbar();
         if(toolbar != null){
             this.setSupportActionBar(toolbar);
+            this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
@@ -76,8 +77,6 @@ public abstract class ActivityPresenter<T extends IDelegate> extends AppCompatAc
     }
 
     protected void bindEventListener(){}
-
-//    protected abstract Class<T> getDelegateClass();
 
     public <T> T getT(Object object, int i){
         Type type = object.getClass().getGenericSuperclass();

@@ -40,7 +40,7 @@ public abstract class AppDelegate implements IDelegate{
     }
 
     public Toolbar getToolbar() {
-        return null;
+        return this.get(R.id.toolbar);
     }
 
     public void setRootView(View view){

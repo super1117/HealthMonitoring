@@ -37,8 +37,7 @@ public class PermissionManager {
                 if (null != needRequestPermissonList
                         && needRequestPermissonList.size() > 0) {
                     String[] array = needRequestPermissonList.toArray(new String[needRequestPermissonList.size()]);
-                    Method method = this.object.getClass().getMethod("requestPermissions", new Class[]{String[].class,
-                            int.class});
+                    Method method = this.object.getClass().getMethod("requestPermissions", new Class[]{String[].class, int.class});
 
                     method.invoke(this.object, array, requestCode);
                     return true;

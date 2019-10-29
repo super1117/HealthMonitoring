@@ -57,7 +57,7 @@ abstract class BasePresenter<T : IDelegate> : ActivityPresenter<T>() {
     protected open fun getClick() : View.OnClickListener = View.OnClickListener { v -> }
 
     private fun setITitle() {
-
+        this.viewDelegate.toolbar
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
