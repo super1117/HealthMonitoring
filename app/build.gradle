@@ -38,4 +38,5 @@ dependencies {
     implementation project(path: ':lib')
     implementation files('libs/BDETrans.jar')
     implementation files('libs/CreativeHealth_pod.jar')
+    implementation files('libs/bugly_crash_release.jar')
 }

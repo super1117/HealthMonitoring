@@ -13,6 +13,7 @@ import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.view.animation.DecelerateInterpolator
+import com.zero.healthmonitoring.presenter.SpoJavaPresenter
 import com.zero.healthmonitoring.presenter.SpoPresenter
 
 
@@ -62,11 +63,11 @@ class HomeDelegate : AppDelegate(){
     private val onclick = View.OnClickListener {
         val intent = Intent()
         when(it.id){
-            R.id.card_0 -> intent.setClass(this.getActivity(), SpoPresenter::class.java)
-            R.id.card_1 -> intent.setClass(this.getActivity(), SpoPresenter::class.java)
-            R.id.card_2 -> intent.setClass(this.getActivity(), SpoPresenter::class.java)
-            R.id.card_3 -> intent.setClass(this.getActivity(), SpoPresenter::class.java)
-            R.id.card_4 -> intent.setClass(this.getActivity(), SpoPresenter::class.java)
+            R.id.card_0 -> intent.setClass(this.getActivity(), SpoJavaPresenter::class.java)
+            R.id.card_1 -> intent.setClass(this.getActivity(), SpoJavaPresenter::class.java)
+            R.id.card_2 -> intent.setClass(this.getActivity(), SpoJavaPresenter::class.java)
+            R.id.card_3 -> intent.setClass(this.getActivity(), SpoJavaPresenter::class.java)
+            R.id.card_4 -> intent.setClass(this.getActivity(), SpoJavaPresenter::class.java)
         }
         this.getActivity<Activity>().startActivity(intent)
     }
