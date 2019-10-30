@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zero.healthmonitoring">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -24,18 +24,24 @@
             android:name="com.bde.parentcyTransport.ACSUtilityService"
             android:enabled="true" />
 
-        <activity android:name=".presenter.MainActivity" android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".presenter.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity android:name=".presenter.SpoPresenter" />
+        <activity android:name=".presenter.SpoJavaPresenter" />
+        <activity android:name=".presenter.RecordPresenter" />
+        <activity android:name=".presenter.DemoMainActivity" />
+        <activity
+            android:name=".presenter.ui.login.LoginPresenter"
+            android:label="@string/title_activity_login_presenter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presenter.SpoPresenter"/>
-        <activity android:name=".presenter.SpoJavaPresenter"/>
-        <activity android:name=".presenter.RecordPresenter"/>
-
-        <activity android:name=".presenter.DemoMainActivity"/>
     </application>
 
 </manifest>
