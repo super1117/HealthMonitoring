@@ -5,33 +5,34 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_spo"
             android:icon="@drawable/ic_launcher_background"
-            android:title="@string/menu_home"/>
+            android:title="血氧历史记录"/>
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_launcher_foreground"
-            android:title="@string/menu_gallery"/>
-        <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_pb"
             android:icon="@drawable/ic_launcher_background"
-            android:title="@string/menu_slideshow"/>
+            android:title="血压历史记录"/>
         <item
-            android:id="@+id/nav_tools"
+            android:id="@+id/nav_heart"
             android:icon="@drawable/ic_launcher_background"
-            android:title="@string/menu_tools"/>
+            android:title="心电历史记录"/>
+        <item
+            android:id="@+id/nav_sleep"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="睡眠监测报告"/>
+
+        <item
+            android:id="@+id/nav_fh"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="胎心历史记录"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="系统">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_setting"
                 android:icon="@drawable/ic_launcher_background"
-                android:title="@string/menu_share"/>
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_launcher_background"
-                android:title="@string/menu_send"/>
+                android:title="@string/setting"/>
         </menu>
     </item>
 

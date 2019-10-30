@@ -11,6 +11,8 @@ public class Test extends AppCompatActivity {
 
     private final static int PERMISSION_RESULT_CODE = 0x100;
 
+    private String[] a = {};
+
     private FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
         @Override
         public Fragment getItem(int position) {

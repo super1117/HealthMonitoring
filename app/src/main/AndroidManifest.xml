@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".presenter.SpoPresenter"/>
+        <activity android:name=".presenter.RecordPresenter"/>
     </application>
 
 </manifest>
