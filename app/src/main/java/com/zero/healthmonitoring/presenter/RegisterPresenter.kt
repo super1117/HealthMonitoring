@@ -29,28 +29,7 @@ class RegisterPresenter : BasePresenter<RegisterDelegate>(){
     }
 
     private fun submit(){
-        if(this.user_account.text.toString().isEmpty()){
-            return
-        }
-        if(this.check_doctor.isChecked && this.user_doctor_id.text.toString().isEmpty()){
-            return
-        }
-        if(this.user_password.text.toString().isEmpty()){
-            return
-        }
-        if(this.user_password_confirm.text.toString().isEmpty()){
-            return
-        }
-        if(TextUtils.equals(this.user_password.text.toString(), this.user_password_confirm.text.toString())){
-            toast(this, "两次密码输入不一致")
-            return
-        }
         val param = HashMap<String, String>()
-        param["uid"] = this.user_account.text.toString()
-        param["pwd"] = this.user_password.text.toString()
-        if(this.check_doctor.isChecked){
-            param["docid"] = this.user_doctor_id.text.toString()
-        }
         SystemApi.provideService()
             .register(param)
             .compose(RxHelper.applySchedulers())

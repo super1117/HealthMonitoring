@@ -3,8 +3,7 @@ package com.zero.healthmonitoring.api
 import com.zero.healthmonitoring.data.BaseModel
 import com.zero.healthmonitoring.data.UserBean
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  * 登录接口:http://101.201.53.157/blood/login/index 参数：uid、pwd 成功返回uid失败返回文字信息
@@ -16,10 +15,12 @@ import retrofit2.http.POST
 
 interface Api {
 
+    @FormUrlEncoded
     @POST("blood/login/register")
-    fun register(@Body map: Map<String, String>): Observable<BaseModel<UserBean>>
+    fun register(@FieldMap map: Map<String, String>): Observable<BaseModel<UserBean>>
 
+    @FormUrlEncoded
     @POST("blood/login/index")
-    fun login(@Body map: Map<String, String>): Observable<BaseModel<UserBean>>
+    fun login(@FieldMap map: Map<String, String>): Observable<BaseModel<UserBean>>
 
 }

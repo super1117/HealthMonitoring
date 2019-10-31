@@ -25,7 +25,8 @@
             android:enabled="true" />
 
         <activity
-            android:name=".presenter.MainActivity">
+            android:name=".presenter.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
         <activity android:name=".presenter.SpoPresenter" />
@@ -34,7 +35,7 @@
         <activity android:name=".presenter.DemoMainActivity" />
         <activity
             android:name=".presenter.LoginPresenter"
-            android:configChanges ="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_login_presenter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +43,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presenter.RegisterPresenter"/>
+        <activity android:name=".presenter.RegisterPresenter"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

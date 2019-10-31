@@ -15,7 +15,7 @@ class RxHelper {
         fun <T> applySchedulers(): ObservableTransformer<BaseModel<T>, T> = ObservableTransformer { upstream ->
             upstream.flatMap { result ->
                 when (result?.code) {
-                    0 -> when (result.data) {
+                    1 -> when (result.data) {
                         null -> Observable.error<T>(Exception(result.toString()))
                         else -> createData(result.data)
                     }

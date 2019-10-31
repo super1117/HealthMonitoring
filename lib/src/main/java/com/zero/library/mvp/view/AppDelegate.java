@@ -83,7 +83,8 @@ public abstract class AppDelegate implements IDelegate{
     }
 
     public void snakebar(String message, Prompt prompt){
-        TSnackbar snackBar = TSnackbar.make(this.getActivity().findViewById(android.R.id.content), message, TSnackbar.LENGTH_LONG);
+
+        TSnackbar snackBar = TSnackbar.make(this.getActivity().getWindow().getDecorView(), message, TSnackbar.LENGTH_LONG);
         snackBar.setAction(null, null);
         snackBar.setPromptThemBackground(prompt);
         //snackBar.addIconProgressLoading(0,true,false);

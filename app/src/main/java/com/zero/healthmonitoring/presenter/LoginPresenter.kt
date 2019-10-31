@@ -1,6 +1,8 @@
 package com.zero.healthmonitoring.presenter
 
 import android.view.MenuItem
+import android.view.View
+import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.api.RxHelper
 import com.zero.healthmonitoring.api.SystemApi
 import com.zero.healthmonitoring.data.UserBean
@@ -22,7 +24,15 @@ class LoginPresenter : BasePresenter<LoginDelegate>(){
 
     override fun bindEventListener() {
         super.bindEventListener()
-        this.login_btn.setOnClickListener{ this.login() }
+        this.viewDelegate.setOnClickListener(this.onClick, R.id.login_btn, R.id.login_register, R.id.login_forget)
+    }
+
+    private val onClick = View.OnClickListener {
+        when(it.id){
+            R.id.login_btn -> this.login()
+            R.id.login_register -> this.start(RegisterPresenter::class.java)
+            R.id.login_forget -> {}
+        }
     }
 
     private fun login(){

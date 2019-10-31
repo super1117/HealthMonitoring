@@ -49,13 +49,14 @@ public class JsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
 
     @Override
     public T convert(ResponseBody value) throws IOException {
-        String response = value.string().replace("\"\"", "null");
-        if(response.startsWith("(")){
-            response = response.substring(1);
-        }
-        if(response.endsWith(")")){
-            response.substring(0, response.lastIndexOf("}"));
-        }
+        String response = value.string();
+//                .replace("\"\"", "null");
+//        if(response.startsWith("(")){
+//            response = response.substring(1);
+//        }
+//        if(response.endsWith(")")){
+//            response.substring(0, response.lastIndexOf("}"));
+//        }
         if (BuildConfig.DEBUG) {
             Log.e("aiya", response);
         }

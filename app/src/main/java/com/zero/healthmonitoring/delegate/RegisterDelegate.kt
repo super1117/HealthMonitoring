@@ -11,9 +11,7 @@ class RegisterDelegate : AppDelegate(){
 
     override fun initWidget() {
         super.initWidget()
-        this.get<CheckBox>(R.id.check_doctor).setOnCheckedChangeListener { _, isChecked ->
-            this.get<View>(R.id.user_doctor_id).visibility = if (isChecked) View.VISIBLE else View.GONE
-        }
+
     }
 
 }
