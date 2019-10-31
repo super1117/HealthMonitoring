@@ -290,7 +290,7 @@ public final class TSnackbar {
      */
     @NonNull
     public static TSnackbar make(@NonNull View view, @NonNull CharSequence text, @Duration int duration) {
-        TSnackbar tSnackbar = new TSnackbar(findSuitableParent(view), APPEAR_FROM_BOTTOM_TO_TOP);
+        TSnackbar tSnackbar = new TSnackbar(findSuitableParent(view), APPEAR_FROM_TOP_TO_DOWN);
         tSnackbar.setText(text);
         tSnackbar.setDuration(duration);
         return tSnackbar;

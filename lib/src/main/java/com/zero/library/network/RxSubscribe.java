@@ -22,7 +22,6 @@ package com.zero.library.network;
 //         佛祖保佑       永无BUG     永不修改                       //
 ////////////////////////////////////////////////////////////////////
 
-import android.text.TextUtils;
 import android.util.Log;
 import com.ubzx.library.R;
 import com.zero.library.mvp.view.AppDelegate;
@@ -42,9 +41,9 @@ public abstract class RxSubscribe<T> implements Observer<T> {
     private ProgressDialog dialog;
     private boolean isShow;
 
-    public RxSubscribe(AppDelegate delegate, boolean isShow) {
+    public RxSubscribe(AppDelegate delegate, boolean showLoading) {
         this.delegate = delegate;
-        this.isShow = isShow;
+        this.isShow = showLoading;
     }
 
     @Override
@@ -115,6 +114,7 @@ public abstract class RxSubscribe<T> implements Observer<T> {
                 dialog.dismiss();
         }
         if(this.delegate != null && !this.delegate.isDestroyed()){
+            this.delegate.snakebar(errMsg, Prompt.ERROR);
             _onError(errMsg);
         }
     }
