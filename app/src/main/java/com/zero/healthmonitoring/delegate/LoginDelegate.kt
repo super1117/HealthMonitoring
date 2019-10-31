@@ -1,5 +1,6 @@
 package com.zero.healthmonitoring.delegate
 
+import com.zero.healthmonitoring.R
 import com.zero.library.mvp.view.AppDelegate
 
 ////////////////////////////////////////////////////////////////////
@@ -30,10 +31,12 @@ import com.zero.library.mvp.view.AppDelegate
  */
 class LoginDelegate : AppDelegate(){
 
-    override fun getRootLayoutId(): Int = 0
+    override fun getRootLayoutId(): Int = R.layout.activity_login
 
     override fun initWidget() {
         super.initWidget()
     }
+
+    override fun getOptionMenuId(): Int = R.menu.login_menu
 
 }
