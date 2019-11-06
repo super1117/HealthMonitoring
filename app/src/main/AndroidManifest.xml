@@ -27,24 +27,20 @@
         <activity
             android:name=".presenter.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:name=".presenter.SpoPresenter" />
-        <activity android:name=".presenter.SpoJavaPresenter" />
-        <activity android:name=".presenter.RecordPresenter" />
-        <activity android:name=".presenter.DemoMainActivity" />
-        <activity
-            android:name=".presenter.LoginPresenter"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/title_activity_login_presenter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".presenter.SpoPresenter" />
+        <activity android:name=".presenter.SpoJavaPresenter" />
+        <activity android:name=".presenter.RecordPresenter" />
+        <activity android:name=".presenter.DemoMainActivity" />
+        <activity android:name=".presenter.LoginPresenter"/>
         <activity android:name=".presenter.RegisterPresenter"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".presenter.PersonDataPresenter"/>
     </application>
 
 </manifest>

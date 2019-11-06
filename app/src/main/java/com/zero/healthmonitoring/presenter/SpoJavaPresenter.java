@@ -13,6 +13,7 @@ import com.creative.base.BLESender;
 import com.creative.base.BaseDate;
 import com.creative.bluetooth.ble.BLEOpertion;
 import com.creative.bluetooth.ble.IBLECallBack;
+import com.zero.healthmonitoring.base.BaseFragmentPresenter;
 import com.zero.healthmonitoring.delegate.SpoDelegate;
 import com.zero.library.utils.GsonUtil;
 import com.zero.library.utils.PermissionManager;
@@ -20,7 +21,7 @@ import com.zero.library.utils.PermissionManager;
 import java.util.Iterator;
 import java.util.List;
 
-public class SpoJavaPresenter extends BasePresenter<SpoDelegate> {
+public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
     private final static int PERMISSION_RESULT_CODE = 0x100;
 
@@ -34,8 +35,9 @@ public class SpoJavaPresenter extends BasePresenter<SpoDelegate> {
 
     @Override
     public void doMain() {
+        this.viewDelegate.getToolbar().setTitle("血氧测试");
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        this.permissionManager = new PermissionManager(this, this);
+        this.permissionManager = new PermissionManager(this.getActivity(), this);
         if(!this.permissionManager.isRequestPermissions(PERMISSION_RESULT_CODE,
                 "android.permission.BLUETOOTH",
                 "android.permission.BLUETOOTH_ADMIN")){
@@ -50,7 +52,7 @@ public class SpoJavaPresenter extends BasePresenter<SpoDelegate> {
         this.viewDelegate.getRootView().postDelayed(() -> {
            if(bluetoothAdapter.isEnabled()){
                try{
-                   ble = new BLEOpertion(SpoJavaPresenter.this, new BleCallBack());
+                   ble = new BLEOpertion(getActivity(), new BleCallBack());
                    viewDelegate.getPara().setText("正在搜索设备...");
                    viewDelegate.getWave().setText(".................");
                    myHandler.sendEmptyMessageDelayed(2, 3000);

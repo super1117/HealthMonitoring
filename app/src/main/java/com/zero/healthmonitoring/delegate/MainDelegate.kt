@@ -10,8 +10,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.zero.library.mvp.view.AppDelegate
 import androidx.appcompat.app.AppCompatActivity
 import com.zero.healthmonitoring.R
+import com.zero.healthmonitoring.presenter.HomePersonPresenter
 import com.zero.healthmonitoring.presenter.HomePresenter
 import com.zero.healthmonitoring.presenter.PersonPresenter
+import com.zero.healthmonitoring.presenter.SpoJavaPresenter
 
 
 ////////////////////////////////////////////////////////////////////
@@ -58,8 +60,8 @@ class MainDelegate : AppDelegate(){
         val nav = this.get<BottomNavigationView>(R.id.view_navigation_main)
         nav.setOnNavigationItemSelectedListener(this.mOnNavigationItemSelectedListener)
 
-        this.fragments.add(HomePresenter())
-        this.fragments.add(PersonPresenter())
+        this.fragments.add(SpoJavaPresenter())
+        this.fragments.add(HomePersonPresenter())
         this.contentPager.offscreenPageLimit = 2
         this.contentPager.adapter = object : FragmentStatePagerAdapter(this.getActivity<AppCompatActivity>().supportFragmentManager) {
             override fun getItem(position: Int): Fragment? {
@@ -88,7 +90,7 @@ class MainDelegate : AppDelegate(){
             }
         })
         rootView.postDelayed({
-            val toolbar = (fragments[0] as HomePresenter).viewDelegate?.toolbar
+            val toolbar = (fragments[0] as SpoJavaPresenter).viewDelegate?.toolbar
             val toggle = ActionBarDrawerToggle(this.getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
             this.drawer.addDrawerListener(toggle)
             toggle.syncState()
