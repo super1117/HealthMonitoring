@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textColor"
+        android:id="@+id/ih_time"
+        android:layout_weight="1"
+        tools:text="@tools:sample/date/hhmmss"
+        android:gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green_primary"
+        android:id="@+id/ih_spo2"
+        android:layout_weight="1"
+        tools:text="98"
+        android:gravity="center_horizontal"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green_primary"
+        android:id="@+id/ih_bpm"
+        android:layout_weight="1"
+        tools:text="60"
+        android:gravity="center_horizontal"/>
+
+</LinearLayout>

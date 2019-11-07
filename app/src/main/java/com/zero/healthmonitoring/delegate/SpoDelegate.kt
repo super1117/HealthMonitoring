@@ -1,23 +1,36 @@
 package com.zero.healthmonitoring.delegate
 
+import android.widget.SeekBar
 import android.widget.TextView
 import com.zero.healthmonitoring.R
 import com.zero.library.mvp.view.AppDelegate
+import com.zero.library.widget.DrawableView
 
 class SpoDelegate : AppDelegate() {
 
-    lateinit var para: TextView
+    lateinit var tvStatus: DrawableView
 
-    lateinit var wave: TextView
+    lateinit var tvSpo2: TextView
 
-    lateinit var tvLog: TextView
+    lateinit var tvBpm: TextView
+
+    lateinit var spoSeek: SeekBar
+
+    lateinit var tvSeek: TextView
 
     override fun getRootLayoutId(): Int = R.layout.activity_sop
 
     override fun initWidget() {
         super.initWidget()
-        this.para = this.get(R.id.para)
-        this.wave = this.get(R.id.wave)
-        this.tvLog = this.get(R.id.tv_log)
+        this.tvStatus = this.get(R.id.tv_status)
+        this.tvSpo2 = this.get(R.id.tv_spo2)
+        this.tvBpm = this.get(R.id.tv_bpm)
+        this.spoSeek = this.get(R.id.spo_seek)
+        this.tvSeek = this.get(R.id.tv_seek)
+
+        this.spoSeek.isClickable = false
+        this.spoSeek.isFocusable = false
+        this.spoSeek.isEnabled = false
+        this.spoSeek.isSelected = false
     }
 }

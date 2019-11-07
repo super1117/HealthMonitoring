@@ -38,4 +38,9 @@ class PersonDataPresenter : BasePresenter<PersonDataDelegate>(){
         this.viewDelegate.adapter.data = list
     }
 
+    override fun bindEventListener() {
+        super.bindEventListener()
+        this.viewDelegate.adapter.setOnItemClickListener { parent, itemView, position -> start(HistoryPresenter::class.java) }
+    }
+
 }

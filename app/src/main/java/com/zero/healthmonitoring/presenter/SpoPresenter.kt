@@ -14,6 +14,7 @@ import com.creative.FingerOximeter.FingerOximeter
 import com.creative.bluetooth.ble.IBLECallBack
 import com.creative.bluetooth.ble.BLEOpertion
 import com.zero.library.utils.GsonUtil
+import kotlinx.android.synthetic.main.activity_demo.*
 import kotlinx.android.synthetic.main.activity_sop.*
 import java.lang.Exception
 
@@ -51,8 +52,8 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
             if (this.bluetoothAdapter.isEnabled) {
                 try {
                     ble = BLEOpertion(this, this.callBack)
-                    viewDelegate.para.text = "正在搜索设备..."
-                    viewDelegate.wave.text = ".................."
+//                    viewDelegate.para.text = "正在搜索设备..."
+//                    viewDelegate.wave.text = ".................."
                     myHandler.sendEmptyMessageDelayed(2, 3000)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -82,7 +83,7 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
             super.handleMessage(msg)
             when (msg.what) {
                 0 -> {
-                    viewDelegate?.para?.text = msg.obj.toString()
+//                    viewDelegate?.para?.text = msg.obj.toString()
                     tv_log.append( "${msg.obj} \n")
                 }
                 1 -> {
@@ -93,7 +94,7 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
                         val w = iterator.next()
                         showText += w.data.toString() + "---"
                     }
-                    viewDelegate?.wave?.text = showText
+//                    viewDelegate?.wave?.text = showText
                     tv_log.append("$showText \n")
                 }
                 2 -> {
@@ -108,29 +109,29 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
     private val callBack = object : IBLECallBack{
 
         override fun onFindDevice(port: blePort) {
-            tv_log.append("onFindDevice ${port._device.address} ${port._device.name} ${port.devInfo} \n")
-            if (port._device.name.trim { it <= ' ' } == "POD") {// 将POD修改为对应的设备名即可
-                ble.stopDiscover()
-                object : Thread() {
-
-                    override fun run() {
-                        super.run()
-                        ble.connect(port)
-                    }
-                }.start()
-            }
+//            tv_log.append("onFindDevice ${port._device.address} ${port._device.name} ${port.devInfo} \n")
+//            if (port._device.name.trim { it <= ' ' } == "POD") {// 将POD修改为对应的设备名即可
+//                ble.stopDiscover()
+//                object : Thread() {
+//
+//                    override fun run() {
+//                        super.run()
+//                        ble.connect(port)
+//                    }
+//                }.start()
+//            }
         }
 
         override fun onConnected(port: blePort) {
-            tv_log.append("onConnected \n${port?.devInfo} \n")
-            tv_log.append("***************************************************\n")
-            tv_log.append("${GsonUtil.setBeanToJson(port?._device)} \n")
-            tv_log.append("***************************************************\n")
-            ble?.let {
-                pod = FingerOximeter(BLEReader(ble), BLESender(ble), fingerOximeterCallBack)
-                pod?.Start()
-                pod?.SetWaveAction(true)
-            }
+//            tv_log.append("onConnected \n${port?.devInfo} \n")
+//            tv_log.append("***************************************************\n")
+//            tv_log.append("${GsonUtil.setBeanToJson(port?._device)} \n")
+//            tv_log.append("***************************************************\n")
+//            ble?.let {
+//                pod = FingerOximeter(BLEReader(ble), BLESender(ble), fingerOximeterCallBack)
+//                pod?.Start()
+//                pod?.SetWaveAction(true)
+//            }
         }
 
         override fun onConnectFail() {
@@ -145,14 +146,14 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
         }
 
         override fun onDiscoveryCompleted(device: List<blePort>) {
-            tv_log.append("onDiscoveryCompleted: \n")
-            tv_log.append("***************************************************\n")
-            device?.forEach{ it ->
-                it?.apply {
-                    tv_log.append("* ${it.devInfo} \n")
-                }
-            }
-            tv_log.append("***************************************************\n")
+//            tv_log.append("onDiscoveryCompleted: \n")
+//            tv_log.append("***************************************************\n")
+//            device?.forEach{ it ->
+//                it?.apply {
+//                    tv_log.append("* ${it.devInfo} \n")
+//                }
+//            }
+//            tv_log.append("***************************************************\n")
         }
 
         override fun onDisConnect(prot: blePort) {
@@ -196,17 +197,17 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
     internal inner class BleCallBack : IBLECallBack {
 
         override fun onFindDevice(port: blePort) {
-            tv_log.append("onFindDevice ${port._device.address} ${port._device.name} ${port.devInfo} \n")
-            if (port._device.name.trim { it <= ' ' } == "POD") {// 将POD修改为对应的设备名即可
-                ble.stopDiscover()
-                object : Thread() {
-
-                    override fun run() {
-                        super.run()
-                        ble.connect(port)
-                    }
-                }.start()
-            }
+//            tv_log.append("onFindDevice ${port._device.address} ${port._device.name} ${port.devInfo} \n")
+//            if (port._device.name.trim { it <= ' ' } == "POD") {// 将POD修改为对应的设备名即可
+//                ble.stopDiscover()
+//                object : Thread() {
+//
+//                    override fun run() {
+//                        super.run()
+//                        ble.connect(port)
+//                    }
+//                }.start()
+//            }
         }
 
         override fun onConnected(port: blePort) {
@@ -233,14 +234,14 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
         }
 
         override fun onDiscoveryCompleted(device: List<blePort>) {
-            tv_log.append("onDiscoveryCompleted: \n")
-            tv_log.append("***************************************************\n")
-            device?.forEach{ it ->
-                it?.apply {
-                    tv_log.append("* ${it.devInfo} \n")
-                }
-            }
-            tv_log.append("***************************************************\n")
+//            tv_log.append("onDiscoveryCompleted: \n")
+//            tv_log.append("***************************************************\n")
+//            device?.forEach{ it ->
+//                it?.apply {
+//                    tv_log.append("* ${it.devInfo} \n")
+//                }
+//            }
+//            tv_log.append("***************************************************\n")
         }
 
         override fun onDisConnect(prot: blePort) {
@@ -250,7 +251,7 @@ class SpoPresenter : BasePresenter<SpoDelegate>() {
         }
 
         override fun onReadyForUse() {
-            tv_log.append("onReadyForUse \n")
+//            tv_log.append("onReadyForUse \n")
         }
 
     }

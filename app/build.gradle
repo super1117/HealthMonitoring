@@ -42,4 +42,5 @@ dependencies {
     implementation files('libs/BDETrans.jar')
     implementation files('libs/CreativeHealth_pod.jar')
     implementation files('libs/bugly_crash_release.jar')
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

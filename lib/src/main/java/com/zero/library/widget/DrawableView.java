@@ -58,7 +58,7 @@ public class DrawableView extends AppCompatTextView {
         return this.drawableSize;
     }
 
-    public void setDrawableResouce(int res, DrawablePosition drawablePosition){
+    public void setDrawableResource(int res, DrawablePosition drawablePosition){
         this.drawableResource = res;
         Drawable drawable = getContext().getResources().getDrawable(res);
         switch (drawablePosition){
@@ -76,6 +76,10 @@ public class DrawableView extends AppCompatTextView {
                 break;
             default:break;
         }
+    }
+
+    public void clearDrawable(){
+        this.setCompoundDrawables(null, null, null, null);
     }
 
     public int getDrwableResource(){

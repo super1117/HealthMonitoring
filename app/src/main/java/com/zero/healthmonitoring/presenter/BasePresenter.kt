@@ -8,9 +8,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import com.zero.healthmonitoring.ActivityManager
+import com.zero.healthmonitoring.R
 import com.zero.library.mvp.presenter.ActivityPresenter
 import com.zero.library.mvp.view.IDelegate
 import com.zero.library.utils.StatusBarUtil
+import kotlinx.android.synthetic.main.view_recycler.*
+import kotlinx.android.synthetic.main.view_recycler.view.*
 
 abstract class BasePresenter<T : IDelegate> : ActivityPresenter<T>() {
 
@@ -58,6 +61,12 @@ abstract class BasePresenter<T : IDelegate> : ActivityPresenter<T>() {
 
     private fun setITitle() {
         this.viewDelegate.toolbar
+    }
+
+    private fun verifyData(){
+        if(this.findViewById<View>(R.id.refresh) != null){
+            this.refresh.setColorSchemeResources(R.color.colorAccent)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

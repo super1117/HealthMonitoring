@@ -4,6 +4,7 @@ import android.view.View
 import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.base.BaseFragmentPresenter
 import com.zero.healthmonitoring.delegate.HomePersonDelegate
+import kotlinx.android.synthetic.main.fragment_home_person.*
 import kotlinx.android.synthetic.main.fragment_home_person.view.*
 
 ////////////////////////////////////////////////////////////////////
@@ -36,6 +37,8 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
 
     override fun doMain() {
         this.viewDelegate.toolbar?.title = "我的"
+        this.person_avatar.setImageResource(R.mipmap.ic_launcher_round)
+        this.person_mobile.text = "(010)1234567"
     }
 
     override fun bindEvenListener() {
