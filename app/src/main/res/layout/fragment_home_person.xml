@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include layout="@layout/view_title"/>
+
+    <com.zero.library.widget.CircleImageView
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:id="@+id/person_avatar"
+        tools:src="@tools:sample/avatars"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="36dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/person_mobile"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        tools:text="@tools:sample/us_phones"
+        android:layout_marginBottom="36dp"/>
+
+    <com.zero.library.widget.DrawableView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:id="@+id/person_spo_record"
+        android:textColor="@color/textColor"
+        android:text="血氧历史记录"
+        android:background="?attr/selectableItemBackground"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bg_default"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+
+    <com.zero.library.widget.DrawableView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:id="@+id/person_update_pw"
+        android:textColor="@color/textColor"
+        android:text="修改密码"
+        android:background="?attr/selectableItemBackground"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bg_default"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+
+    <com.zero.library.widget.DrawableView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:id="@+id/person_checkout"
+        android:textColor="@color/textColor"
+        android:text="检查版本更新"
+        android:background="?attr/selectableItemBackground"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/bg_default"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
+
+    <com.zero.library.widget.DrawableView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:id="@+id/person_about"
+        android:textColor="@color/textColor"
+        android:text="关于我们"
+        android:background="?attr/selectableItemBackground"/>
+
+</LinearLayout>

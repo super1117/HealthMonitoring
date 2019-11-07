@@ -37,14 +37,7 @@ import com.zero.library.mvp.view.IDelegate
 
 abstract class BaseFragmentPresenter<T : IDelegate> : FragmentPresenter<T>() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-//        if(view.findViewById(R.id.swiper) != null){
-        //            ((SwipeRefreshLayout)view.findViewById(R.id.swiper)).setColorSchemeResources(R.color.colorAccent);
-        //        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
