@@ -12,6 +12,7 @@ class RxHelper {
 
     companion object {
 
+        @JvmStatic
         fun <T> applySchedulers(): ObservableTransformer<BaseModel<T>, T> = ObservableTransformer { upstream ->
             upstream.flatMap { result ->
                 when (result?.code) {
@@ -26,6 +27,7 @@ class RxHelper {
                 .observeOn(AndroidSchedulers.mainThread())
         }
 
+        @JvmStatic
         private fun <T> createData(data: T): Observable<T> = Observable.create { subscriber ->
             try {
                 subscriber.onNext(data)
@@ -35,7 +37,7 @@ class RxHelper {
             }
         }
 
-
+        @JvmStatic
         fun <T> applySchedulersNoModel(): ObservableTransformer<T, T> = ObservableTransformer { upstream ->
             upstream.flatMap { result -> createData(result) }
                 .subscribeOn(Schedulers.io())

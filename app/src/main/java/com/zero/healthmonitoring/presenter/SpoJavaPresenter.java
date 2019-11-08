@@ -1,10 +1,12 @@
 package com.zero.healthmonitoring.presenter;
 
 import android.bluetooth.BluetoothAdapter;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.SeekBar;
 
 import com.bde.parentcyTransport.ACSUtility;
 import com.creative.FingerOximeter.FingerOximeter;
@@ -15,14 +17,21 @@ import com.creative.base.BaseDate;
 import com.creative.bluetooth.ble.BLEOpertion;
 import com.creative.bluetooth.ble.IBLECallBack;
 import com.zero.healthmonitoring.R;
+import com.zero.healthmonitoring.api.RxHelper;
+import com.zero.healthmonitoring.api.SystemApi;
 import com.zero.healthmonitoring.base.BaseFragmentPresenter;
+import com.zero.healthmonitoring.data.UserBean;
 import com.zero.healthmonitoring.delegate.SpoDelegate;
+import com.zero.library.network.RxSubscribe;
 import com.zero.library.utils.GsonUtil;
 import com.zero.library.utils.PermissionManager;
 import com.zero.library.widget.DrawableView;
+import com.zero.library.widget.snakebar.Prompt;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
@@ -72,15 +81,22 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
     private Handler myHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            if(viewDelegate == null){
+                return;
+            }
             switch (msg.what){
                 case 0:
-                    if(msg.obj.toString().equals("connected")){
+                    if(TextUtils.equals(msg.obj.toString(), "connected")){
                         currentTime = System.currentTimeMillis();
                         viewDelegate.getTvStatus().setText("设备已连接");
                         viewDelegate.getTvStatus().setDrawableResource(R.drawable.ic_check_circle_24dp, DrawableView.DrawablePosition.RIGHT);
                         myHandler.sendEmptyMessage(4);
+                    }else if(TextUtils.equals(msg.obj.toString(), "disconnect")){
+                        viewDelegate.getTvStatus().setText("设备已断开");
+                        viewDelegate.getTvStatus().clearDrawable();
                     }else{
                         viewDelegate.getTvStatus().setText(msg.obj.toString());
+                        viewDelegate.getTvStatus().clearDrawable();
                     }
                     break;
                 case 1:
@@ -104,7 +120,11 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                     break;
                 case 4:
                     int curProgress = msg.obj == null ? 0 : Integer.parseInt(msg.obj.toString());
-                    viewDelegate.getSpoSeek().setProgress(curProgress > 100 ? 100 : curProgress);
+                    if(Build.VERSION.SDK_INT >= 24){
+                        viewDelegate.getSpoSeek().setProgress(curProgress > 100 ? 100 : curProgress, true);
+                    }else{
+                        viewDelegate.getSpoSeek().setProgress(curProgress > 100 ? 100 : curProgress);
+                    }
                     viewDelegate.getTvSeek().setText(viewDelegate.getSpoSeek().getProgress() + "%");
                     long cur = System.currentTimeMillis();
                     if(curProgress < 100){
@@ -112,12 +132,26 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                         message.what = 4;
                         message.obj = (cur - currentTime) * 100 / TEST_TOTAL_TIME;
                         myHandler.sendMessageDelayed(message, 50);
+                    }else if(curProgress == 100){
+                        myHandler.obtainMessage(0, "测试完成").sendToTarget();
+                        if(ble != null){
+                            ble.disConnect();
+                        }
+                        addInfo(viewDelegate.getTvSpo2().getText().toString(), viewDelegate.getTvBpm().getText().toString());
                     }
                     break;
                 default:break;
             }
         }
     };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(ble != null){
+            ble.disConnect();
+        }
+    }
 
     private class BleCallBack implements IBLECallBack{
 
@@ -155,15 +189,19 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 //            viewDelegate.getTvLog().append("***************************************************\n");
 //            viewDelegate.getTvLog().append(GsonUtil.setBeanToJson(blePort._device) + " \n");
 //            viewDelegate.getTvLog().append("***************************************************\n");
-            myHandler.obtainMessage(0, "connected").sendToTarget();
-            pod = new FingerOximeter(new BLEReader(ble), new BLESender(ble), new FingerOximeterCallBack());
-            pod.Start();
-            pod.SetWaveAction(true);
+            if(myHandler != null){
+                myHandler.obtainMessage(0, "connected").sendToTarget();
+                pod = new FingerOximeter(new BLEReader(ble), new BLESender(ble), new FingerOximeterCallBack());
+                pod.Start();
+                pod.SetWaveAction(true);
+            }
         }
 
         @Override
         public void onConnectFail() {
-            myHandler.obtainMessage(0, "连接断开").sendToTarget();
+            if(myHandler != null){
+                myHandler.obtainMessage(0, "连接失败").sendToTarget();
+            }
             if (pod != null)
                 pod.Stop();
             pod = null;
@@ -176,9 +214,11 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
         @Override
         public void onDisConnect(ACSUtility.blePort blePort) {
-            myHandler.obtainMessage(0, "连接断开").sendToTarget();
-            pod.Stop();
-            pod = null;
+            if(myHandler != null){
+                myHandler.obtainMessage(0, "disconnect").sendToTarget();
+                pod.Stop();
+                pod = null;
+            }
         }
 
         @Override
@@ -192,12 +232,16 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
         @Override
         public void OnGetSpO2Param(int nSpO2, int nPR, float nPI, boolean nStatus, int nMode, float nPower) {
 //            myHandler.obtainMessage(0, "接收到参数--" + nSpO2 + " " + nPR + " " + nPI).sendToTarget();
-            myHandler.obtainMessage(3, nSpO2 + " " + nPR).sendToTarget();
+            if(myHandler != null){
+                myHandler.obtainMessage(3, nSpO2 + " " + nPR).sendToTarget();
+            }
         }
 
         @Override
         public void OnGetSpO2Wave(List<BaseDate.Wave> wave) {
-            myHandler.obtainMessage(1, wave).sendToTarget();
+            if(myHandler != null){
+                myHandler.obtainMessage(1, wave).sendToTarget();
+            }
         }
 
         @Override
@@ -209,5 +253,31 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
         public void OnConnectLose() {
 
         }
+    }
+
+    private void addInfo(String spo, String bpm){
+        if(this.getUser() == null){
+            readyGo(LoginPresenter.class);
+            getActivity().finish();
+            return;
+        }
+        Map<String, String> param = new HashMap<>();
+        param.put("uid", this.getUser().getUid());
+        param.put("spo", spo);
+        param.put("bpm", bpm);
+        SystemApi.provideService()
+                .addInfo(param)
+                .compose(RxHelper.applySchedulers())
+                .subscribe(new RxSubscribe<String>(this.viewDelegate, true) {
+                    @Override
+                    protected void _onNext(String t) {
+                        viewDelegate.snakebar("已提交", Prompt.SUCCESS);
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+
+                    }
+                });
     }
 }

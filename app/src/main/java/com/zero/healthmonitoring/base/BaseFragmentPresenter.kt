@@ -28,25 +28,47 @@ package com.zero.healthmonitoring.base
  */
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.zero.healthmonitoring.R
+import com.zero.healthmonitoring.data.UserBean
+import com.zero.healthmonitoring.presenter.BasePresenter
 
 import com.zero.library.mvp.presenter.FragmentPresenter
+import com.zero.library.mvp.view.AppDelegate
 import com.zero.library.mvp.view.IDelegate
+import com.zero.library.utils.GsonUtil
+import com.zero.library.utils.SPUtil
+import kotlinx.android.synthetic.main.view_recycler.*
 
-abstract class BaseFragmentPresenter<T : IDelegate> : FragmentPresenter<T>() {
+abstract class BaseFragmentPresenter<T : AppDelegate> : FragmentPresenter<T>() {
+
+    var user: UserBean? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        if(view?.findViewById<View>(R.id.refresh) != null){
+            this.refresh.setColorSchemeResources(R.color.colorAccent)
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        verifyData()
         doMain()
     }
 
     protected abstract fun doMain()
+
+    private fun verifyData(){
+        if (this.activity is BasePresenter<*>) {
+            this.user = (this.activity as BasePresenter<*>).user
+        }
+
+    }
 
     override fun onDestroy() {
         super.onDestroy()

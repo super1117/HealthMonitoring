@@ -35,7 +35,7 @@ class SystemApi {
                 .client(client)
                 .build()
         }
-
+        @JvmStatic
         fun provideService(): Api {
             return provideRetrofit(Config.HOST).create(Api::class.java!!)
         }

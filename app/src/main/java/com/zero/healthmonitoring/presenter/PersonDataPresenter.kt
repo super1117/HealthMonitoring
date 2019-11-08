@@ -43,4 +43,7 @@ class PersonDataPresenter : BasePresenter<PersonDataDelegate>(){
         this.viewDelegate.adapter.setOnItemClickListener { parent, itemView, position -> start(HistoryPresenter::class.java) }
     }
 
+    private fun getData(){
+
+    }
 }

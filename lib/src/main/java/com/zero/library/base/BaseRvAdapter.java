@@ -20,7 +20,7 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<BaseViewHold
 
     protected Context mContext;
 
-    protected List<T> mData;
+    protected ArrayList<T> mData;
 
     private LayoutInflater inflater;
 
@@ -108,7 +108,7 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<BaseViewHold
      * 设置列表数据
      * @param data
      */
-    public void setData(List<T> data){
+    public void setData(ArrayList<T> data){
         this.mData.clear();
         this.mData.addAll(data);
         this.notifyDataSetChanged();
@@ -118,7 +118,7 @@ public abstract class BaseRvAdapter<T> extends RecyclerView.Adapter<BaseViewHold
      * 获取列表数据
      * @return
      */
-    public List<T> getData(){
+    public ArrayList<T> getData(){
         return this.mData;
     }
 

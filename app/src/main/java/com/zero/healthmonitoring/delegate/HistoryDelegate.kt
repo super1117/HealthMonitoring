@@ -1,6 +1,5 @@
 package com.zero.healthmonitoring.delegate
 
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart

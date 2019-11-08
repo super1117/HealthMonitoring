@@ -8,13 +8,16 @@ import com.zero.healthmonitoring.api.SystemApi
 import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.delegate.LoginDelegate
 import com.zero.library.network.RxSubscribe
+import com.zero.library.utils.GsonUtil
+import com.zero.library.utils.SPUtil
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 
 class LoginPresenter : BasePresenter<LoginDelegate>(){
 
     override fun doMain() {
-
+        this.login_account.setText("123")
+        this.login_password.setText("123456")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -36,20 +39,21 @@ class LoginPresenter : BasePresenter<LoginDelegate>(){
     }
 
     private fun login(){
-//        if(this.login_account.text.toString().isEmpty()){
-//            return
-//        }
-//        if(this.login_password.text.toString().isEmpty()){
-//            return
-//        }
+        if(this.login_account.text.toString().isEmpty()){
+            return
+        }
+        if(this.login_password.text.toString().isEmpty()){
+            return
+        }
         val params = HashMap<String, String>()
-        params["uid"] = "123"//this.login_account.text.toString()
-        params["pwd"] = "123456"//this.login_password.text.toString()
+        params["uid"] = this.login_account.text.toString()
+        params["pwd"] = this.login_password.text.toString()
         SystemApi.provideService()
             .login(params)
             .compose(RxHelper.applySchedulers())
             .subscribe(object: RxSubscribe<UserBean>(this.viewDelegate, true){
                 override fun _onNext(t: UserBean?) {
+                    SPUtil.put(this@LoginPresenter, "user", GsonUtil.setBeanToJson(t))
                     start(MainActivity::class.java)
                     finish()
                 }

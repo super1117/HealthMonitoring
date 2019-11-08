@@ -3,19 +3,25 @@ package com.zero.healthmonitoring.presenter
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import com.zero.healthmonitoring.ActivityManager
 import com.zero.healthmonitoring.R
+import com.zero.healthmonitoring.data.UserBean
 import com.zero.library.mvp.presenter.ActivityPresenter
 import com.zero.library.mvp.view.IDelegate
+import com.zero.library.utils.GsonUtil
+import com.zero.library.utils.SPUtil
 import com.zero.library.utils.StatusBarUtil
 import kotlinx.android.synthetic.main.view_recycler.*
 import kotlinx.android.synthetic.main.view_recycler.view.*
 
 abstract class BasePresenter<T : IDelegate> : ActivityPresenter<T>() {
+
+    var user: UserBean? = null
 
     protected fun contentView(): View = this.viewDelegate.rootView
 
@@ -35,6 +41,7 @@ abstract class BasePresenter<T : IDelegate> : ActivityPresenter<T>() {
         Log.e("currentPage", this::class.java.simpleName)
         ActivityManager.instance.addActivity(this)
         this.setITitle()
+        this.verifyData()
         this.doMain()
     }
 
@@ -64,6 +71,9 @@ abstract class BasePresenter<T : IDelegate> : ActivityPresenter<T>() {
     }
 
     private fun verifyData(){
+        if(!TextUtils.isEmpty(SPUtil.get(this, "user", "").toString())){
+            this.user = GsonUtil.setJsonToBean(SPUtil.get(this, "user", "").toString(), UserBean::class.java)
+        }
         if(this.findViewById<View>(R.id.refresh) != null){
             this.refresh.setColorSchemeResources(R.color.colorAccent)
         }

@@ -2,6 +2,7 @@ package com.zero.healthmonitoring.api
 
 import com.zero.healthmonitoring.data.BaseModel
 import com.zero.healthmonitoring.data.UserBean
+import com.zero.healthmonitoring.data.UserTestBean
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -14,13 +15,31 @@ import retrofit2.http.*
  */
 
 interface Api {
-
+    /**
+     * 注册
+     */
     @FormUrlEncoded
     @POST("blood/login/register")
     fun register(@FieldMap map: Map<String, String>): Observable<BaseModel<UserBean>>
 
+    /**
+     * 登录
+     */
     @FormUrlEncoded
     @POST("blood/login/index")
     fun login(@FieldMap map: Map<String, String>): Observable<BaseModel<UserBean>>
 
+    /**
+     * 添加记录
+     */
+    @FormUrlEncoded
+    @POST("blood/user/add_info")
+    fun addInfo(@FieldMap map: Map<String, String>): Observable<BaseModel<String>>
+
+    /**
+     * 测量信息列表
+     */
+    @FormUrlEncoded
+    @POST("blood/user/blo_list")
+    fun bloList(@FieldMap map: Map<String, String?>): Observable<BaseModel<UserTestBean>>
 }

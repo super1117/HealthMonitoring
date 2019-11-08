@@ -27,10 +27,6 @@ class SpoDelegate : AppDelegate() {
         this.tvBpm = this.get(R.id.tv_bpm)
         this.spoSeek = this.get(R.id.spo_seek)
         this.tvSeek = this.get(R.id.tv_seek)
-
-        this.spoSeek.isClickable = false
-        this.spoSeek.isFocusable = false
-        this.spoSeek.isEnabled = false
-        this.spoSeek.isSelected = false
+        this.spoSeek.setOnTouchListener { _, _ ->  true}
     }
 }
