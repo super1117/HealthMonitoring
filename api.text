@@ -1,0 +1,5 @@
+测量信息列表年接口:http://101.201.53.157/blood/user/blo_list_year 参数：uid、pagenum、year 成功返回所有相关信息失败返回文字信息
+测量信息列表月接口:http://101.201.53.157/blood/user/blo_list_month 参数：uid、month 成功返回所有相关信息失败返回文字信息
+测量信息列表日接口:http://101.201.53.157/blood/user/blo_list_day 参数：uid、day 成功返回所有相关信息失败返回文字信息
+测量信息列表日接口:http://101.201.53.157/blood/user/blo_list_time 参数：uid、time 成功返回所有相关信息失败返回文字信息
+测量信息列表日接口:http://101.201.53.157/blood/user/blo_all_year 参数：uid  成功返回所有相关信息失败返回文字信息

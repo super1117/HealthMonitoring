@@ -1,6 +1,7 @@
 package com.zero.healthmonitoring.presenter
 
 import android.graphics.Color
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -15,6 +16,7 @@ import com.zero.healthmonitoring.api.SystemApi
 import com.zero.healthmonitoring.data.UserTestBean
 import com.zero.healthmonitoring.delegate.HistoryDelegate
 import com.zero.library.network.RxSubscribe
+import kotlinx.android.synthetic.main.activity_demo.*
 import kotlinx.android.synthetic.main.activity_history.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -48,15 +50,14 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         this.yearAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, this.yearList)
         this.yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         this.ah_year.adapter = this.yearAdapter
-        this.monthList.add(0, "全部")
         this.monthAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, this.monthList)
         this.monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         this.ah_month.adapter = this.monthAdapter
         this.dayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, this.dayList)
         this.dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         this.ah_day.adapter = this.dayAdapter
-        
-        this.getData(1)
+
+        this.getYears()
     }
 
     override fun bindEventListener() {
@@ -68,13 +69,8 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
         this.ah_year.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Log.e("aiya", "year : ${yearList[position]}")
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -84,13 +80,8 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         }
         this.ah_month.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Log.e("aiya", "year : ${monthList[position]}")
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -100,13 +91,8 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         }
         this.ah_day.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                Log.e("aiya", "year : ${dayList[position]}")
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -151,23 +137,31 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         return LineData(sets)
     }
 
-    private fun getData(page: Int){
+    private fun clearData(){
+        monthList.clear()
+        dayList.clear()
+        list.clear()
+        monthAdapter.notifyDataSetChanged()
+        dayAdapter.notifyDataSetChanged()
+        viewDelegate.adapter.notifyDataSetChanged()
+    }
+
+    private fun getListByYear(year: String){
+        clearData()
         val param = HashMap<String, String?>()
         param["uid"] = this.user?.uid
-        param["pagenum"] = page.toString()
+        param["year"] = year
         SystemApi.provideService()
-            .bloList(param)
+            .getBloListByYear(param)
             .compose(RxHelper.applySchedulers())
-            .subscribe(object : RxSubscribe<UserTestBean>(this.viewDelegate, true){
+            .subscribe(object : RxSubscribe<UserTestBean>(this.viewDelegate, false){
                 override fun _onNext(t: UserTestBean?) {
                     t?.apply {
-                        if(page == 1){
-                            list.clear()
-                        }
+                        list.clear()
                         bloinfo?.apply {
                             list.addAll(this)
                             viewDelegate.adapter.notifyDataSetChanged()
-                            formatTime(this)
+//                            getListByMonty()
                         }
                     }
                 }
@@ -178,38 +172,113 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
             })
     }
 
-    private fun formatTime(t: List<UserTestBean.BloinfoBean>){
-        t.forEach {
-            it.addtime?.apply {
-                val arr = this.split(" ")
-                if(arr.size > 1){
-                    val date = arr[0].split("-")
-                    if(date.size > 2){
-                        yearList.add(date[0])
-                        monthList.add(date[1])
-                        dayList.add(date[2])
+    private fun getListByMonty(month: String, year: String){
+        val params = HashMap<String, String>()
+        params["uid"] = this.user?.uid!!
+        params["year"] = year
+        params["month"] = month
+        SystemApi.provideService()
+            .getBloListByMonth(params)
+            .compose(RxHelper.applySchedulers())
+            .subscribe(object : RxSubscribe<UserTestBean>(this.viewDelegate, false){
+
+                override fun _onNext(t: UserTestBean?) {
+                    t?.let {
+                        it.bloinfo?.let {list ->
+                            list?.forEach {blo ->
+                                monthList.add(blo.month.toString())
+                            }
+                        }
                     }
                 }
-            }
 
+                override fun _onError(message: String?) {
+
+                }
+
+            })
+    }
+
+    private fun getListByDay(day: String, month: String, year: String){
+        val params = HashMap<String, String>()
+        params["uid"] = this.user?.uid.toString()
+        params["year"] = year
+        params["month"] = month
+        params["day"] = day
+        SystemApi.provideService()
+            .getBloListByDay(params)
+            .compose(RxHelper.applySchedulers())
+            .subscribe(object : RxSubscribe<UserTestBean>(this.viewDelegate, false){
+
+                override fun _onNext(t: UserTestBean?) {
+                    t?.apply {
+                        this.bloinfo?.apply {
+                            if(this.isEmpty()) return
+                            this.forEach {
+                                dayList.add(it.day.toString())
+                            }
+                        }
+                    }
+                }
+
+                override fun _onError(message: String?) {
+
+                }
+
+            })
+    }
+
+    /**
+     * 获取年份
+     */
+    private fun getYears(){
+        this.user?.apply {
+            val params = HashMap<String, String>()
+            params["uid"] = this.uid.toString()
+            SystemApi.provideService()
+                .getYears(params)
+                .compose(RxHelper.applySchedulers())
+                .subscribe(object : RxSubscribe<List<String>>(this@HistoryPresenter.viewDelegate, false){
+
+                    override fun _onNext(t: List<String>?) {
+                        t?.let {
+                            yearList.clear()
+                            yearList.addAll(t)
+                            yearAdapter.notifyDataSetChanged()
+                            getListByYear(yearList[0])
+                        }
+                    }
+
+                    override fun _onError(message: String?) {
+
+                    }
+
+                })
         }
-        this.clearRepeat(this.yearList)
-        this.clearRepeat(this.monthList)
-        this.clearRepeat(this.dayList)
-
-        this.yearList.add("2019")
-        this.yearList.add("2018")
-        this.monthList.add("01")
-        this.yearAdapter.notifyDataSetChanged()
-        this.monthAdapter.notifyDataSetChanged()
-        this.dayAdapter.notifyDataSetChanged()
     }
 
-    private fun clearRepeat(list: LinkedList<String>){
-        val set = HashSet<String>()
-        set.addAll(list)
-        list.clear()
-        list.addAll(set)
-        list.sortedDescending()
+    private fun getMonth(t: List<UserTestBean.BloinfoBean>, year: String){
+        monthList.clear()
+        t.forEach {
+            if(TextUtils.equals(year, it.year)){
+                monthList.add(it.month.toString())
+            }
+        }
+        monthList.distinct()
+        monthList.add(0, "全部")
+        monthAdapter.notifyDataSetChanged()
     }
+
+    private fun getDay(t: List<UserTestBean.BloinfoBean>, month: String, year: String){
+        dayList.clear()
+        t.forEach {
+            if(TextUtils.equals(it.year, year) && TextUtils.equals(it.month, month)){
+                dayList.add(it.day.toString())
+            }
+        }
+        dayList.distinct()
+        dayList.add(0, "全部")
+        dayAdapter.notifyDataSetChanged()
+    }
+
 }

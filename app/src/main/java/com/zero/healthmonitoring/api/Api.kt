@@ -37,9 +37,30 @@ interface Api {
     fun addInfo(@FieldMap map: Map<String, String>): Observable<BaseModel<String>>
 
     /**
-     * 测量信息列表
+     * 测量信息列表 By year
      */
     @FormUrlEncoded
-    @POST("blood/user/blo_list")
-    fun bloList(@FieldMap map: Map<String, String?>): Observable<BaseModel<UserTestBean>>
+    @POST("blood/user/blo_list_year")
+    fun getBloListByYear(@FieldMap map: Map<String, String?>): Observable<BaseModel<UserTestBean>>
+
+    /**
+     * 测量信息列表 By month
+     */
+    @FormUrlEncoded
+    @POST("blood/user/blo_list_month")
+    fun getBloListByMonth(@FieldMap map: Map<String, String?>): Observable<BaseModel<UserTestBean>>
+
+    /**
+     * 测量信息列表 By day
+     */
+    @FormUrlEncoded
+    @POST("blood/user/blo_list_day")
+    fun getBloListByDay(@FieldMap map: Map<String, String?>): Observable<BaseModel<UserTestBean>>
+
+    /**
+     * 获取所有的年份
+     */
+    @FormUrlEncoded
+    @POST("blood/user/blo_all_year")
+    fun getYears(@FieldMap map: Map<String, String?>): Observable<BaseModel<List<String>>>
 }

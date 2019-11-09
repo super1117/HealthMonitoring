@@ -23,5 +23,9 @@ class UserTestBean {
         var bpm: String? = null
         var minhg: Any? = null
         var addtime: String? = null
+        var year: String? = null
+        var month: String? = null
+        var day: String? = null
+        var times: String? = null
     }
 }
