@@ -39,8 +39,9 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
     private lateinit var dayAdapter: ArrayAdapter<String>
 
+    private var isTouchSpinner = false
+
     override fun doMain() {
-        viewDelegate.fillDataToChart(generateDataLine())
         this.list = this.viewDelegate.adapter.data
 
         this.ah_year.prompt = "年"
@@ -66,11 +67,18 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         this.viewDelegate.adapter.setOnLoadListener {
             Log.e("aiya", "load more ...")
         }
-
+        this.ah_month.setOnTouchListener { _, motionEvent ->
+            isTouchSpinner = true
+            super.onTouchEvent(motionEvent)
+        }
+        this.ah_day.setOnTouchListener { _, motionEvent ->
+            isTouchSpinner = true
+            super.onTouchEvent(motionEvent)
+        }
         this.ah_year.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Log.e("aiya", "year : ${yearList[position]}")
+                getListByYear(yearList[position])
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -81,7 +89,14 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         this.ah_month.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Log.e("aiya", "year : ${monthList[position]}")
+                if(position == 0){
+                    if(isTouchSpinner){
+                        isTouchSpinner = false
+                        getListByYear(yearList[ah_year.selectedItemPosition])
+                    }
+                    return
+                }
+                getListByMonty(monthList[position], yearList[ah_year.selectedItemPosition])
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -92,7 +107,14 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         this.ah_day.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                Log.e("aiya", "year : ${dayList[position]}")
+                if(position == 0){
+                    if(isTouchSpinner){
+                        isTouchSpinner = false
+                        getListByMonty(monthList[ah_month.selectedItemPosition], yearList[ah_year.selectedItemPosition])
+                    }
+                    return
+                }
+                getListByDay(dayList[position], monthList[ah_month.selectedItemPosition], yearList[ah_year.selectedItemPosition])
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -102,12 +124,30 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         }
     }
 
-    private fun generateDataLine(): LineData {
+    /**
+     * 填充图标数据
+     * @param type 1年 2月 3日
+     */
+    private fun generateDataLine(type: Int): LineData {
 
         val values1 = ArrayList<Entry>()
+        val values2 = ArrayList<Entry>()
 
-        for (i in 0..30) {
-            values1.add(Entry(i.toFloat(), ((Math.random() * 65).toInt() + 40).toFloat()))
+        list.forEach {
+            when(type){
+                1 -> {
+                    values1.add(Entry(it.year?.toFloat()?:1970F, it.spo?.toFloat()?:0F))
+                    values2.add(Entry(it.year?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
+                }
+                2 -> {
+                    values1.add(Entry(it.month?.toFloat()?:1F, it.spo?.toFloat()?:0F))
+                    values2.add(Entry(it.month?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
+                }
+                3 -> {
+                    values1.add(Entry(it.day?.toFloat()?:1F, it.spo?.toFloat()?:0F))
+                    values2.add(Entry(it.day?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
+                }
+            }
         }
 
         val d1 = LineDataSet(values1, "Spo2")
@@ -115,12 +155,6 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         d1.circleRadius = 4.5f
         d1.highLightColor = Color.rgb(244, 117, 117)
         d1.setDrawValues(false)
-
-        val values2 = ArrayList<Entry>()
-
-        for (i in 0..30) {
-            values2.add(Entry(i.toFloat(), values1[i].y - 30))
-        }
 
         val d2 = LineDataSet(values2, "BPM")
         d2.lineWidth = 2.5f
@@ -156,14 +190,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
             .compose(RxHelper.applySchedulers())
             .subscribe(object : RxSubscribe<UserTestBean>(this.viewDelegate, false){
                 override fun _onNext(t: UserTestBean?) {
-                    t?.apply {
-                        list.clear()
-                        bloinfo?.apply {
-                            list.addAll(this)
-                            viewDelegate.adapter.notifyDataSetChanged()
-//                            getListByMonty()
-                        }
-                    }
+                    doResult(1, t)
                 }
 
                 override fun _onError(message: String?) {
@@ -183,13 +210,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
             .subscribe(object : RxSubscribe<UserTestBean>(this.viewDelegate, false){
 
                 override fun _onNext(t: UserTestBean?) {
-                    t?.let {
-                        it.bloinfo?.let {list ->
-                            list?.forEach {blo ->
-                                monthList.add(blo.month.toString())
-                            }
-                        }
-                    }
+                    doResult(2, t)
                 }
 
                 override fun _onError(message: String?) {
@@ -211,14 +232,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
             .subscribe(object : RxSubscribe<UserTestBean>(this.viewDelegate, false){
 
                 override fun _onNext(t: UserTestBean?) {
-                    t?.apply {
-                        this.bloinfo?.apply {
-                            if(this.isEmpty()) return
-                            this.forEach {
-                                dayList.add(it.day.toString())
-                            }
-                        }
-                    }
+                    doResult(3, t)
                 }
 
                 override fun _onError(message: String?) {
@@ -226,6 +240,24 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
                 }
 
             })
+    }
+
+    private fun doResult(type: Int, t: UserTestBean?){
+        t?.apply {
+            list.clear()
+            bloinfo?.apply {
+                list.addAll(this)
+                viewDelegate.adapter.notifyDataSetChanged()
+                viewDelegate.fillDataToChart(generateDataLine(type))
+                if(type == 1){
+                    if(this.isEmpty()) return
+                    getMonth(this, "${this[0].year}")
+                }else if(type == 2){
+                    if(this.isEmpty()) return
+                    getDay(this, "${this[0].month}", "${this[0].year}")
+                }
+            }
+        }
     }
 
     /**
@@ -245,7 +277,6 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
                             yearList.clear()
                             yearList.addAll(t)
                             yearAdapter.notifyDataSetChanged()
-                            getListByYear(yearList[0])
                         }
                     }
 
@@ -261,7 +292,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         monthList.clear()
         t.forEach {
             if(TextUtils.equals(year, it.year)){
-                monthList.add(it.month.toString())
+                monthList.add("${it.month}")
             }
         }
         monthList.distinct()
@@ -273,7 +304,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         dayList.clear()
         t.forEach {
             if(TextUtils.equals(it.year, year) && TextUtils.equals(it.month, month)){
-                dayList.add(it.day.toString())
+                dayList.add("${it.day}")
             }
         }
         dayList.distinct()
