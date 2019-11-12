@@ -89,7 +89,8 @@
             style="?android:attr/buttonBarButtonStyle"
             android:textColor="@color/app_blue_dark"
             android:clickable="true"
-            android:id="@+id/login_forget"/>
+            android:id="@+id/login_forget"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </LinearLayout>

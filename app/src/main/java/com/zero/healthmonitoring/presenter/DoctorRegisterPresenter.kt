@@ -10,10 +10,7 @@ import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.delegate.DoctorRegisterDelegate
 import com.zero.library.network.RxSubscribe
 import com.zero.library.widget.snakebar.Prompt
-import kotlinx.android.synthetic.main.activity_sop.*
 import kotlinx.android.synthetic.main.view_register_user.*
-import kotlinx.android.synthetic.main.view_register_user.view.*
-import kotlinx.android.synthetic.main.view_register_user.view.register_mobile
 
 ////////////////////////////////////////////////////////////////////
 //                          _ooOoo_                               //
@@ -52,9 +49,9 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
         this.viewDelegate.setOnClickListener(View.OnClickListener {
             when(it.id){
                 R.id.register_btn -> this.onSubmit()
-                R.id.register_verify_btn -> this.getVerifyCode()
+//                R.id.register_verify_btn -> this.getVerifyCode()
             }
-        }, R.id.register_btn, R.id.register_verify_btn)
+        }, R.id.register_btn)//, R.id.register_verify_btn)
     }
 
     private fun getVerifyCode(){
@@ -73,9 +70,9 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
         if(this.register_mobile.text.toString().isEmpty()){
             return
         }
-        if(this.register_verify.text.toString().isEmpty()){
-            return
-        }
+//        if(this.register_verify.text.toString().isEmpty()){
+//            return
+//        }
         if(this.register_password.text.toString().isEmpty()){
             return
         }
@@ -87,9 +84,8 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
             return
         }
         val params = HashMap<String, String>()
-        params["uid"] = ""
-        params["pwd"] = ""
-        params["docid"] = ""
+        params["uid"] = this.register_mobile.text.toString()
+        params["pwd"] = this.register_password.text.toString()
         SystemApi.provideService()
             .register(params)
             .compose(RxHelper.applySchedulers())

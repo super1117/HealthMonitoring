@@ -133,11 +133,11 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                         message.obj = (cur - currentTime) * 100 / TEST_TOTAL_TIME;
                         myHandler.sendMessageDelayed(message, 50);
                     }else if(curProgress == 100){
+                        addInfo(viewDelegate.getTvSpo2().getText().toString(), viewDelegate.getTvBpm().getText().toString());
                         myHandler.obtainMessage(0, "测试完成").sendToTarget();
                         if(ble != null){
                             ble.disConnect();
                         }
-                        addInfo(viewDelegate.getTvSpo2().getText().toString(), viewDelegate.getTvBpm().getText().toString());
                     }
                     break;
                 default:break;

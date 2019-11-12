@@ -48,7 +48,7 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
 
     private val onClick = View.OnClickListener {
         when(it.id){
-            R.id.person_spo_record -> readyGo(PersonDataPresenter::class.java)
+            R.id.person_spo_record -> readyGo(HistoryPresenter::class.java)
         }
     }
 

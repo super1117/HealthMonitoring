@@ -3,3 +3,6 @@
 测量信息列表日接口:http://101.201.53.157/blood/user/blo_list_day 参数：uid、day 成功返回所有相关信息失败返回文字信息
 测量信息列表日接口:http://101.201.53.157/blood/user/blo_list_time 参数：uid、time 成功返回所有相关信息失败返回文字信息
 测量信息列表日接口:http://101.201.53.157/blood/user/blo_all_year 参数：uid  成功返回所有相关信息失败返回文字信息
+
+
+修改密码接口:http://101.201.53.157/blood/user/edit_pwd 参数：uid、pwd 成功返回1失败返回文字信息

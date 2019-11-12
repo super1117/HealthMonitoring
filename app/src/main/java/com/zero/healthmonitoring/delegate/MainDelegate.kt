@@ -46,7 +46,7 @@ class MainDelegate : AppDelegate(){
 
     private lateinit var contentPager: ViewPager
 
-    private lateinit var drawer: DrawerLayout
+//    private lateinit var drawer: DrawerLayout
 
     private val fragments = ArrayList<Fragment>()
 
@@ -55,8 +55,8 @@ class MainDelegate : AppDelegate(){
     override fun initWidget() {
         super.initWidget()
         this.contentPager = this.get(R.id.view_pager_main)
-        this.drawer = this.get(R.id.drawer_layout)
-
+//        this.drawer = this.get(R.id.drawer_layout)
+//
         val nav = this.get<BottomNavigationView>(R.id.view_navigation_main)
         nav.setOnNavigationItemSelectedListener(this.mOnNavigationItemSelectedListener)
 
@@ -89,12 +89,12 @@ class MainDelegate : AppDelegate(){
 
             }
         })
-        rootView.postDelayed({
-            val toolbar = (fragments[0] as SpoJavaPresenter).viewDelegate?.toolbar
-            val toggle = ActionBarDrawerToggle(this.getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-            this.drawer.addDrawerListener(toggle)
-            toggle.syncState()
-        }, 1000)
+//        rootView.postDelayed({
+//            val toolbar = (fragments[0] as SpoJavaPresenter).viewDelegate?.toolbar
+//            val toggle = ActionBarDrawerToggle(this.getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+//            this.drawer.addDrawerListener(toggle)
+//            toggle.syncState()
+//        }, 1000)
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->

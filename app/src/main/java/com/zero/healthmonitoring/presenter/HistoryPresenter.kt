@@ -132,24 +132,25 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
         val values1 = ArrayList<Entry>()
         val values2 = ArrayList<Entry>()
-
-        list.forEach {
+        for(i in list.indices.reversed()){
+            val it = list[i]
             when(type){
                 1 -> {
-                    values1.add(Entry(it.year?.toFloat()?:1970F, it.spo?.toFloat()?:0F))
-                    values2.add(Entry(it.year?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
-                }
-                2 -> {
-                    values1.add(Entry(it.month?.toFloat()?:1F, it.spo?.toFloat()?:0F))
+                    values1.add(Entry(it.month?.toFloat()?:1970F, it.spo?.toFloat()?:0F))
                     values2.add(Entry(it.month?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
                 }
-                3 -> {
+                2 -> {
                     values1.add(Entry(it.day?.toFloat()?:1F, it.spo?.toFloat()?:0F))
                     values2.add(Entry(it.day?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
                 }
+                3 -> {
+                    val times = it.times?.split(":")
+                    val h = times?.get(0)
+                    values1.add(Entry(h?.toFloat()?:1F, it.spo?.toFloat()?:0F))
+                    values2.add(Entry(h?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
+                }
             }
         }
-
         val d1 = LineDataSet(values1, "Spo2")
         d1.lineWidth = 2.5f
         d1.circleRadius = 4.5f
@@ -290,24 +291,26 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
     private fun getMonth(t: List<UserTestBean.BloinfoBean>, year: String){
         monthList.clear()
+        val mList = LinkedList<String>()
         t.forEach {
             if(TextUtils.equals(year, it.year)){
-                monthList.add("${it.month}")
+                mList.add("${it.month}")
             }
         }
-        monthList.distinct()
+        monthList.addAll(mList.distinct())
         monthList.add(0, "全部")
         monthAdapter.notifyDataSetChanged()
     }
 
     private fun getDay(t: List<UserTestBean.BloinfoBean>, month: String, year: String){
         dayList.clear()
+        val dList = LinkedList<String>()
         t.forEach {
             if(TextUtils.equals(it.year, year) && TextUtils.equals(it.month, month)){
-                dayList.add("${it.day}")
+                dList.add("${it.day}")
             }
         }
-        dayList.distinct()
+        dayList.addAll(dList.distinct())
         dayList.add(0, "全部")
         dayAdapter.notifyDataSetChanged()
     }
