@@ -38,6 +38,7 @@
         <activity android:name=".presenter.DemoMainActivity" />
         <activity android:name=".presenter.PersonDataPresenter"/>
         <activity android:name=".presenter.HistoryPresenter"/>
+        <activity android:name=".delegate.ForgetPwPresenter"/>
     </application>
 
 </manifest>

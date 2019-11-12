@@ -7,9 +7,9 @@
     android:background="@color/white">
 
     <ImageView
-        android:layout_width="56dp"
+        android:layout_width="wrap_content"
         android:layout_height="56dp"
-        android:src="@mipmap/ic_launcher_round"
+        android:src="@mipmap/icon_logo_h"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="80dp"/>
 
@@ -89,8 +89,7 @@
             style="?android:attr/buttonBarButtonStyle"
             android:textColor="@color/app_blue_dark"
             android:clickable="true"
-            android:id="@+id/login_forget"
-            android:visibility="gone"/>
+            android:id="@+id/login_forget"/>
 
     </LinearLayout>
 </LinearLayout>
