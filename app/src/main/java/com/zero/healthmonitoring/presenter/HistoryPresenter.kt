@@ -2,6 +2,7 @@ package com.zero.healthmonitoring.presenter
 
 import android.graphics.Color
 import android.text.TextUtils
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -13,6 +14,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.zero.healthmonitoring.api.RxHelper
 import com.zero.healthmonitoring.api.SystemApi
+import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.data.UserTestBean
 import com.zero.healthmonitoring.delegate.HistoryDelegate
 import com.zero.library.network.RxSubscribe
@@ -42,6 +44,8 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
     private var isTouchSpinner = false
 
     override fun doMain() {
+        this.user = UserBean()
+        this.user!!.uid = "123"
         this.list = this.viewDelegate.adapter.data
 
         this.ah_year.prompt = "年"
@@ -249,7 +253,8 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
             bloinfo?.apply {
                 list.addAll(this)
                 viewDelegate.adapter.notifyDataSetChanged()
-                viewDelegate.fillDataToChart(generateDataLine(type))
+
+                viewDelegate.fillDataToChart(generateDataLine(type), type)
                 if(type == 1){
                     if(this.isEmpty()) return
                     getMonth(this, "${this[0].year}")
@@ -260,6 +265,13 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
             }
         }
     }
+
+    private fun getTableViewBottomCount(type: Int) : Int = when(type){
+            1 -> 12
+            2 -> 0
+            3 -> 24
+            else -> 12
+        }
 
     /**
      * 获取年份

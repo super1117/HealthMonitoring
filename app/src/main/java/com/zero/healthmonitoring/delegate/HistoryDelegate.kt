@@ -26,11 +26,23 @@ class HistoryDelegate : AppDelegate(){
         this.ahChart.description.isEnabled = false
         this.ahChart.setDrawGridBackground(false)
 
+        this.ahRv = this.get(R.id.ah_rv)
+        val manager = LinearLayoutManager(this.getActivity())
+        manager.orientation = RecyclerView.VERTICAL
+        this.ahRv.layoutManager = manager
+        this.adapter = HistoryAdapter(this.ahRv)
+        this.ahRv.adapter = this.adapter
+    }
+
+    fun fillDataToChart(data: LineData, count: Int){
         val xAxis = this.ahChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 //        xAxis.typeface = mTf
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(true)
+        xAxis.setLabelCount(count, false)
+//        xAxis.labelRotationAngle = 45f
+        xAxis.axisMinimum = 0f
 
         val leftAxis = this.ahChart.axisLeft
 //        leftAxis.typeface = mTf
@@ -43,15 +55,6 @@ class HistoryDelegate : AppDelegate(){
         rightAxis.setDrawGridLines(false)
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
-        this.ahRv = this.get(R.id.ah_rv)
-        val manager = LinearLayoutManager(this.getActivity())
-        manager.orientation = RecyclerView.VERTICAL
-        this.ahRv.layoutManager = manager
-        this.adapter = HistoryAdapter(this.ahRv)
-        this.ahRv.adapter = this.adapter
-    }
-
-    fun fillDataToChart(data: LineData){
         this.ahChart.data = data
         this.ahChart.animateX(750)
     }
