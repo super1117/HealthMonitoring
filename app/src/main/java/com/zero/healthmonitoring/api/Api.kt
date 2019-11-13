@@ -63,4 +63,11 @@ interface Api {
     @FormUrlEncoded
     @POST("blood/user/blo_all_year")
     fun getYears(@FieldMap map: Map<String, String?>): Observable<BaseModel<List<String>>>
+
+    /**
+     * 获取所有的年份
+     */
+    @FormUrlEncoded
+    @POST("blood/user/edit_pwd")
+    fun editPw(@FieldMap map: Map<String, String?>): Observable<BaseModel<String>>
 }

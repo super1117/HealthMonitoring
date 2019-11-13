@@ -8,6 +8,7 @@ import com.zero.healthmonitoring.api.SystemApi
 import com.zero.healthmonitoring.base.BaseFragmentPresenter
 import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.delegate.PersonRegisterDelegate
+import com.zero.healthmonitoring.extend.toast
 import com.zero.library.network.RxSubscribe
 import com.zero.library.widget.snakebar.Prompt
 import kotlinx.android.synthetic.main.view_register_user.*
@@ -98,6 +99,7 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
             .compose(RxHelper.applySchedulers())
             .subscribe(object : RxSubscribe<UserBean>(this.viewDelegate, true){
                 override fun _onNext(t: UserBean?) {
+                    activity?.toast(activity!!, "注册成功")
                     this@PersonRegisterPresenter.activity?.finish()
                 }
 

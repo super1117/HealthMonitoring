@@ -6,6 +6,7 @@ import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.api.RxHelper
 import com.zero.healthmonitoring.api.SystemApi
 import com.zero.healthmonitoring.data.UserBean
+import com.zero.healthmonitoring.delegate.ForgetPwPresenter
 import com.zero.healthmonitoring.delegate.LoginDelegate
 import com.zero.library.network.RxSubscribe
 import com.zero.library.utils.GsonUtil
@@ -16,8 +17,8 @@ import kotlinx.android.synthetic.main.activity_register.*
 class LoginPresenter : BasePresenter<LoginDelegate>(){
 
     override fun doMain() {
-        this.login_account.setText("123")
-        this.login_password.setText("123456")
+//        this.login_account.setText("123")
+//        this.login_password.setText("123456")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -34,7 +35,7 @@ class LoginPresenter : BasePresenter<LoginDelegate>(){
         when(it.id){
             R.id.login_btn -> this.login()
             R.id.login_register -> this.start(RegisterPresenter::class.java)
-            R.id.login_forget -> {}
+            R.id.login_forget -> start(ForgetPwPresenter::class.java)
         }
     }
 

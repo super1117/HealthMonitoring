@@ -1,17 +1,17 @@
-package com.zero.healthmonitoring.presenter
+package com.zero.healthmonitoring.delegate
 
 import android.text.TextUtils
 import android.view.View
+import com.zero.healthmonitoring.ActivityManager
 import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.api.RxHelper
 import com.zero.healthmonitoring.api.SystemApi
-import com.zero.healthmonitoring.base.BaseFragmentPresenter
-import com.zero.healthmonitoring.data.UserBean
-import com.zero.healthmonitoring.delegate.DoctorRegisterDelegate
-import com.zero.healthmonitoring.extend.toast
+import com.zero.healthmonitoring.presenter.BasePresenter
+import com.zero.healthmonitoring.presenter.LoginPresenter
 import com.zero.library.network.RxSubscribe
 import com.zero.library.widget.snakebar.Prompt
-import kotlinx.android.synthetic.main.view_register_user.*
+import kotlinx.android.synthetic.main.activity_pw_forget.*
+import kotlinx.android.synthetic.main.activity_pw_forget.view.*
 
 ////////////////////////////////////////////////////////////////////
 //                          _ooOoo_                               //
@@ -37,63 +37,63 @@ import kotlinx.android.synthetic.main.view_register_user.*
 //                    此代码模块已经经过开光处理                      //
 ////////////////////////////////////////////////////////////////////
 /**
- * create by szl on 2019-11-02
+ * create by szl on 2019-11-12
  */
-class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() {
+class ForgetPwPresenter : BasePresenter<ForgetPwDelegate>(){
 
     override fun doMain() {
+        supportActionBar?.title = "修改密码"
 
     }
 
-    override fun bindEvenListener() {
-        super.bindEvenListener()
-        this.viewDelegate.setOnClickListener(View.OnClickListener {
-            when(it.id){
-                R.id.register_btn -> this.onSubmit()
-//                R.id.register_verify_btn -> this.getVerifyCode()
-            }
-        }, R.id.register_btn)//, R.id.register_verify_btn)
+    override fun bindEventListener() {
+        super.bindEventListener()
+        this.viewDelegate.setOnClickListener(this.onClick, R.id.forget_btn)
     }
 
-    private fun getVerifyCode(){
-        if(this.register_mobile.text.toString().isEmpty()){
-            viewDelegate.snakebar("请输入手机号", Prompt.WARNING)
-            return
+    private val onClick = View.OnClickListener {
+        when(it.id){
+            R.id.forget_btn -> this.verifyData()
         }
-        if(this.register_mobile.text.toString().length < 11){
-            viewDelegate.snakebar("请输入正确的手机号", Prompt.WARNING)
-            return
-        }
-
     }
 
-    private fun onSubmit(){
-        if(this.register_mobile.text.toString().isEmpty()){
+    private fun verifyData(){
+        if(this.forget_mobile.text.toString().isEmpty()){
             return
         }
-//        if(this.register_verify.text.toString().isEmpty()){
+//        if(forget_verify.text.toString().isEmpty()){
 //            return
 //        }
-        if(this.register_password.text.toString().isEmpty()){
+        if(this.forget_password.text.toString().isEmpty()){
             return
         }
-        if(this.register_password_confirm.text.toString().isEmpty()){
+        if(forget_password_confirm.text.toString().isEmpty()){
             return
         }
-        if(!TextUtils.equals(this.register_password.text.toString(), this.register_password_confirm.text.toString())){
+        if(!TextUtils.equals(this.forget_password.text.toString(), this.forget_password_confirm.text.toString())){
             viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
             return
         }
+        this.onSubmit()
+    }
+
+    private fun onSubmit(){
         val params = HashMap<String, String>()
-        params["uid"] = this.register_mobile.text.toString()
-        params["pwd"] = this.register_password.text.toString()
+        params["uid"] = this.forget_mobile.text.toString()
+        params["pwd"] = this.forget_password.text.toString()
         SystemApi.provideService()
-            .register(params)
+            .editPw(params)
             .compose(RxHelper.applySchedulers())
-            .subscribe(object : RxSubscribe<UserBean>(this.viewDelegate, true){
-                override fun _onNext(t: UserBean?) {
-                    activity?.toast(activity!!, "注册成功")
-                    this@DoctorRegisterPresenter.activity?.finish()
+            .subscribe(object : RxSubscribe<String>(this.viewDelegate, true){
+
+                override fun _onNext(t: String?) {
+                    viewDelegate?.snakebar("修改成功，请重新登录", Prompt.SUCCESS)
+                    viewDelegate?.showLoading()
+                    viewDelegate?.rootView?.postDelayed({
+                        viewDelegate?.dismissLoading()
+                        ActivityManager.instance.finishAllActivity()
+                        start(LoginPresenter::class.java)
+                    }, 3000)
                 }
 
                 override fun _onError(message: String?) {
@@ -101,5 +101,4 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
                 }
             })
     }
-
 }

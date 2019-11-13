@@ -1,12 +1,7 @@
-package com.zero.healthmonitoring.presenter
+package com.zero.healthmonitoring.delegate
 
-import android.view.View
 import com.zero.healthmonitoring.R
-import com.zero.healthmonitoring.base.BaseFragmentPresenter
-import com.zero.healthmonitoring.delegate.ForgetPwPresenter
-import com.zero.healthmonitoring.delegate.HomePersonDelegate
-import kotlinx.android.synthetic.main.fragment_home_person.*
-import kotlinx.android.synthetic.main.fragment_home_person.view.*
+import com.zero.library.mvp.view.AppDelegate
 
 ////////////////////////////////////////////////////////////////////
 //                          _ooOoo_                               //
@@ -32,26 +27,15 @@ import kotlinx.android.synthetic.main.fragment_home_person.view.*
 //                    此代码模块已经经过开光处理                      //
 ////////////////////////////////////////////////////////////////////
 /**
- * create by szl on 2019-11-02
+ * create by szl on 2019-11-12
  */
-class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
+class ForgetPwDelegate : AppDelegate(){
 
-    override fun doMain() {
-        this.viewDelegate.toolbar?.title = "我的"
-        this.person_avatar.setImageResource(R.drawable.icon_launcher)
-        this.person_mobile.text = this.user?.uid?:resources.getString(R.string.app_name )
-    }
+    override fun getRootLayoutId(): Int = R.layout.activity_pw_forget
 
-    override fun bindEvenListener() {
-        super.bindEvenListener()
-        this.viewDelegate.setOnClickListener(this.onClick, R.id.person_spo_record, R.id.person_update_pw)
-    }
+    override fun initWidget() {
+        super.initWidget()
 
-    private val onClick = View.OnClickListener {
-        when(it.id){
-            R.id.person_spo_record -> readyGo(HistoryPresenter::class.java)
-            R.id.person_update_pw -> readyGo(ForgetPwPresenter::class.java)
-        }
     }
 
 }

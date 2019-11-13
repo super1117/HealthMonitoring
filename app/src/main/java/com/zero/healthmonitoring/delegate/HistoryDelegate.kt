@@ -1,10 +1,12 @@
 package com.zero.healthmonitoring.delegate
 
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.adapter.HistoryAdapter
 import com.zero.library.mvp.view.AppDelegate
@@ -35,13 +37,14 @@ class HistoryDelegate : AppDelegate(){
     }
 
     fun fillDataToChart(data: LineData, count: Int){
+        Log.e("aiya", "count = $count")
         val xAxis = this.ahChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 //        xAxis.typeface = mTf
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(true)
         xAxis.setLabelCount(count, false)
-//        xAxis.labelRotationAngle = 45f
+//        xAxis.labelRotationAngle = -45f
         xAxis.axisMinimum = 0f
 
         val leftAxis = this.ahChart.axisLeft
