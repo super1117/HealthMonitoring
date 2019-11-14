@@ -1,6 +1,14 @@
 package com.zero.healthmonitoring.presenter
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.zero.healthmonitoring.R
+import com.zero.healthmonitoring.api.RxHelper
+import com.zero.healthmonitoring.api.SystemApi
+import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.delegate.PersonDataDelegate
+import com.zero.library.network.RxSubscribe
+import kotlinx.android.synthetic.main.activity_demo.*
+import kotlinx.android.synthetic.main.view_recycler.view.*
 
 ////////////////////////////////////////////////////////////////////
 //                          _ooOoo_                               //
@@ -30,12 +38,12 @@ import com.zero.healthmonitoring.delegate.PersonDataDelegate
  */
 class PersonDataPresenter : BasePresenter<PersonDataDelegate>(){
 
+    private lateinit var list: ArrayList<UserBean>
+
     override fun doMain() {
-        val list = ArrayList<String>()
-        for(i in 0..100){
-            list.add("item $i")
-        }
-        this.viewDelegate.adapter.data = list
+        this.list = this.viewDelegate.adapter.data
+        this.viewDelegate?.get<SwipeRefreshLayout>(R.id.refresh)?.isRefreshing = true
+        this.getData()
     }
 
     override fun bindEventListener() {
@@ -44,6 +52,24 @@ class PersonDataPresenter : BasePresenter<PersonDataDelegate>(){
     }
 
     private fun getData(){
+        val params = HashMap<String, String>()
+        params["uid"] = this.user?.uid?:""
+        SystemApi.provideService()
+            .getPatientList(params)
+            .compose(RxHelper.applySchedulers())
+            .subscribe(object : RxSubscribe<List<UserBean>>(this.viewDelegate, false){
+                override fun _onNext(t: List<UserBean>?) {
+                    viewDelegate?.get<SwipeRefreshLayout>(R.id.refresh)?.isRefreshing = false
+                    t?.let {
+                        if(it.isEmpty()) return
+                        list.addAll(t)
+                        viewDelegate?.adapter?.notifyDataSetChanged()
+                    }
+                }
 
+                override fun _onError(message: String?) {
+                    viewDelegate?.get<SwipeRefreshLayout>(R.id.refresh)?.isRefreshing = false
+                }
+            })
     }
 }

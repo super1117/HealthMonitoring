@@ -84,7 +84,7 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
             viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
             return
         }
-        (this.activity as RegisterPresenter).submit(this.register_mobile.text.toString(), this.register_verify.text.toString(), null, this.register_password.text.toString())
+        (this.activity as RegisterPresenter).submit(this.register_mobile.text.toString(), this.register_verify.text.toString(), "", this.register_password.text.toString())
     }
 
 }

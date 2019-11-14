@@ -68,7 +68,7 @@ interface Api {
      * 参数：type(注册register/忘记密码forget)、mobile 成功返回1失败返回文字信息
      */
     @FormUrlEncoded
-    @POST("blood/user/sendcode")
+    @POST("blood/login/sendcode")
     fun getVerifyCode(@FieldMap map: Map<String, String?>): Observable<BaseModel<String>>
 
     /**
@@ -76,8 +76,16 @@ interface Api {
      * 参数：type(注册register/忘记密码forget)、mobile、code（用户填写的验证码） 、pwd、docid成功返回1失败返回文字信息
      */
     @FormUrlEncoded
-    @POST("login/verify_code")
+    @POST("blood/login/verify_code")
     fun registerOrForget(@FieldMap map: Map<String, String?>): Observable<BaseModel<String>>
+
+    /**
+     * 医生患者列表
+     */
+    @FormUrlEncoded
+    @POST("blood/user/patient_list")
+    fun getPatientList(@FieldMap map: Map<String, String?>): Observable<BaseModel<List<UserBean>>>
+
 
 
 }

@@ -16,3 +16,5 @@
 首页发送短信验证码接口:http://101.201.53.157/blood/user/sendcode 参数：type(注册register/忘记密码forget)、mobile 成功返回1失败返回文字信息
 首页注册、忘记密码接口:http://101.201.53.157/blood/user/verify_code 参数：type(注册register/忘记密码forget)、mobile、code（用户填写的验证码） 、pwd、docid成功返回1失败返回文字信息
 首页注册、忘记密码接口:http://101.201.53.157/blood/login/verify_code 参数：type(注册1/忘记密码2)、mobile、code（用户填写的验证码） 、pwd、docid成功返回1失败返回文字信息
+
+医生患者列表接口:http://101.201.53.157/blood/user/patient_list 参数：医生uid成功返回数据失败返回文字信息

@@ -6,8 +6,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.ObservableTransformer
 
-
-
 class RxHelper {
 
     companion object {
