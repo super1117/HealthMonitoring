@@ -3,12 +3,8 @@ package com.zero.healthmonitoring.presenter
 import android.text.TextUtils
 import android.view.View
 import com.zero.healthmonitoring.R
-import com.zero.healthmonitoring.api.RxHelper
-import com.zero.healthmonitoring.api.SystemApi
 import com.zero.healthmonitoring.base.BaseFragmentPresenter
-import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.delegate.PersonRegisterDelegate
-import com.zero.library.network.RxSubscribe
 import com.zero.library.widget.snakebar.Prompt
 import kotlinx.android.synthetic.main.view_register_user.*
 
@@ -42,17 +38,16 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
 
     override fun doMain() {
 
-
     }
 
     override fun bindEvenListener() {
         super.bindEvenListener()
         this.viewDelegate.setOnClickListener(View.OnClickListener {
             when(it.id){
-//                R.id.register_verify_btn -> this.getVerifyCode()
+                R.id.register_verify_btn -> this.getVerifyCode()
                 R.id.register_btn -> this.onSubmit()
             }
-        }, R.id.register_btn)//, R.id.register_verify_btn)
+        }, R.id.register_btn, R.id.register_verify_btn)
     }
 
     private fun getVerifyCode(){
@@ -60,7 +55,7 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
             viewDelegate.snakebar("请填写手机号", Prompt.WARNING)
             return
         }
-
+        (this.activity as RegisterPresenter).getVerifyCode(this.register_mobile.text.toString())
     }
 
     private fun onSubmit(){
@@ -70,9 +65,9 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
 //        if(this.register_age.text.toString().isEmpty()){
 //            return
 //        }
-//        if(this.register_verify.text.toString().isEmpty()){
-//            return
-//        }
+        if(this.register_verify.text.toString().isEmpty()){
+            return
+        }
         if(this.register_mobile.text.toString().isEmpty()){
             return
         }
@@ -89,22 +84,10 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
             viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
             return
         }
-        val params = HashMap<String, String>()
-        params["uid"] = this.register_mobile.text.toString()
-        params["pwd"] = this.register_password.text.toString()
-        params["docid"] = this.register_doctor_id.text.toString()
-        SystemApi.provideService()
-            .register(params)
-            .compose(RxHelper.applySchedulers())
-            .subscribe(object : RxSubscribe<UserBean>(this.viewDelegate, true){
-                override fun _onNext(t: UserBean?) {
-                    this@PersonRegisterPresenter.activity?.finish()
-                }
-
-                override fun _onError(message: String?) {
-
-                }
-            })
+        (this.activity as RegisterPresenter).submit(this.register_mobile.text.toString(),
+            this.register_verify.text.toString(),
+            this.register_doctor_id.text.toString(),
+            this.register_password.text.toString())
     }
 
 }

@@ -8,6 +8,7 @@ import com.zero.healthmonitoring.api.SystemApi
 import com.zero.healthmonitoring.base.BaseFragmentPresenter
 import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.delegate.DoctorRegisterDelegate
+import com.zero.healthmonitoring.extend.toast
 import com.zero.library.network.RxSubscribe
 import com.zero.library.widget.snakebar.Prompt
 import kotlinx.android.synthetic.main.view_register_user.*
@@ -49,9 +50,9 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
         this.viewDelegate.setOnClickListener(View.OnClickListener {
             when(it.id){
                 R.id.register_btn -> this.onSubmit()
-//                R.id.register_verify_btn -> this.getVerifyCode()
+                R.id.register_verify_btn -> this.getVerifyCode()
             }
-        }, R.id.register_btn)//, R.id.register_verify_btn)
+        }, R.id.register_btn, R.id.register_verify_btn)
     }
 
     private fun getVerifyCode(){
@@ -63,16 +64,16 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
             viewDelegate.snakebar("请输入正确的手机号", Prompt.WARNING)
             return
         }
-
+        (this.activity as RegisterPresenter).getVerifyCode(this.register_mobile.text.toString())
     }
 
     private fun onSubmit(){
         if(this.register_mobile.text.toString().isEmpty()){
             return
         }
-//        if(this.register_verify.text.toString().isEmpty()){
-//            return
-//        }
+        if(this.register_verify.text.toString().isEmpty()){
+            return
+        }
         if(this.register_password.text.toString().isEmpty()){
             return
         }
@@ -83,21 +84,7 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
             viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
             return
         }
-        val params = HashMap<String, String>()
-        params["uid"] = this.register_mobile.text.toString()
-        params["pwd"] = this.register_password.text.toString()
-        SystemApi.provideService()
-            .register(params)
-            .compose(RxHelper.applySchedulers())
-            .subscribe(object : RxSubscribe<UserBean>(this.viewDelegate, true){
-                override fun _onNext(t: UserBean?) {
-                    this@DoctorRegisterPresenter.activity?.finish()
-                }
-
-                override fun _onError(message: String?) {
-
-                }
-            })
+        (this.activity as RegisterPresenter).submit(this.register_mobile.text.toString(), this.register_verify.text.toString(), "", this.register_password.text.toString())
     }
 
 }

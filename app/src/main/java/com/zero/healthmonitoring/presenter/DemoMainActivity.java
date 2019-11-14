@@ -18,9 +18,13 @@ import com.creative.bluetooth.ble.BLEOpertion;
 import com.creative.bluetooth.ble.IBLECallBack;
 import com.zero.healthmonitoring.R;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * {@hide}
+ */
 public class DemoMainActivity extends AppCompatActivity {
 
     // private WifiAdmin wifiadmin;

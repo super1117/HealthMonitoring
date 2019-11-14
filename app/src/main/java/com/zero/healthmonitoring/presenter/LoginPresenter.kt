@@ -1,5 +1,6 @@
 package com.zero.healthmonitoring.presenter
 
+import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import com.zero.healthmonitoring.R
@@ -17,8 +18,8 @@ import kotlinx.android.synthetic.main.activity_register.*
 class LoginPresenter : BasePresenter<LoginDelegate>(){
 
     override fun doMain() {
-        this.login_account.setText("123")
-        this.login_password.setText("123456")
+//        this.login_account.setText("123")
+//        this.login_password.setText("123456")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -35,7 +36,11 @@ class LoginPresenter : BasePresenter<LoginDelegate>(){
         when(it.id){
             R.id.login_btn -> this.login()
             R.id.login_register -> this.start(RegisterPresenter::class.java)
-            R.id.login_forget -> start(ForgetPwPresenter::class.java)
+            R.id.login_forget -> {
+                val data = Bundle()
+                data.putString("from", "login")
+                start(ForgetPwPresenter::class.java, data)
+            }
         }
     }
 
@@ -47,7 +52,7 @@ class LoginPresenter : BasePresenter<LoginDelegate>(){
             return
         }
         val params = HashMap<String, String>()
-        params["uid"] = this.login_account.text.toString()
+        params["mobile"] = this.login_account.text.toString()
         params["pwd"] = this.login_password.text.toString()
         SystemApi.provideService()
             .login(params)

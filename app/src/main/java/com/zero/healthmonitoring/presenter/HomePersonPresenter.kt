@@ -1,8 +1,10 @@
 package com.zero.healthmonitoring.presenter
 
+import android.os.Bundle
 import android.view.View
 import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.base.BaseFragmentPresenter
+import com.zero.healthmonitoring.delegate.ForgetPwPresenter
 import com.zero.healthmonitoring.delegate.HomePersonDelegate
 import kotlinx.android.synthetic.main.fragment_home_person.*
 import kotlinx.android.synthetic.main.fragment_home_person.view.*
@@ -37,18 +39,23 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
 
     override fun doMain() {
         this.viewDelegate.toolbar?.title = "我的"
-        this.person_avatar.setImageResource(R.mipmap.ic_launcher_round)
-        this.person_mobile.text = "(010)1234567"
+        this.person_avatar.setImageResource(R.drawable.icon_launcher)
+        this.person_mobile.text = this.user?.uid?:resources.getString(R.string.app_name )
     }
 
     override fun bindEvenListener() {
         super.bindEvenListener()
-        this.viewDelegate.setOnClickListener(this.onClick, R.id.person_spo_record)
+        this.viewDelegate.setOnClickListener(this.onClick, R.id.person_spo_record, R.id.person_update_pw)
     }
 
     private val onClick = View.OnClickListener {
         when(it.id){
-            R.id.person_spo_record -> readyGo(HistoryPresenter::class.java)
+            R.id.person_spo_record -> readyGo(PersonDataPresenter::class.java)
+            R.id.person_update_pw -> {
+                val data = Bundle()
+                data.putString("from", "person")
+                readyGo(ForgetPwPresenter::class.java, data)
+            }
         }
     }
 

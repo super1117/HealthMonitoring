@@ -2,6 +2,7 @@ package com.zero.healthmonitoring.presenter
 
 import android.graphics.Color
 import android.text.TextUtils
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -13,15 +14,18 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.zero.healthmonitoring.api.RxHelper
 import com.zero.healthmonitoring.api.SystemApi
+import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.data.UserTestBean
 import com.zero.healthmonitoring.delegate.HistoryDelegate
 import com.zero.library.network.RxSubscribe
+import com.zero.library.utils.TimeUtils
 import kotlinx.android.synthetic.main.activity_demo.*
 import kotlinx.android.synthetic.main.activity_history.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
+import kotlin.math.max
 
 class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
@@ -42,6 +46,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
     private var isTouchSpinner = false
 
     override fun doMain() {
+        this.supportActionBar?.title = "历史记录"
         this.list = this.viewDelegate.adapter.data
 
         this.ah_year.prompt = "年"
@@ -132,32 +137,53 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
         val values1 = ArrayList<Entry>()
         val values2 = ArrayList<Entry>()
+
         for(i in list.indices.reversed()){
             val it = list[i]
             when(type){
                 1 -> {
-                    values1.add(Entry(it.month?.toFloat()?:1970F, it.spo?.toFloat()?:0F))
-                    values2.add(Entry(it.month?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
+                    values1.add(Entry(it.month?.toFloat()?:0F, it.spo?.toFloat()?:0F))
+                    values2.add(Entry(it.month?.toFloat()?:0F, it.bpm?.toFloat()?:0F))
                 }
                 2 -> {
-                    values1.add(Entry(it.day?.toFloat()?:1F, it.spo?.toFloat()?:0F))
-                    values2.add(Entry(it.day?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
+                    values1.add(Entry(it.day?.toFloat()?:0F, it.spo?.toFloat()?:0F))
+                    values2.add(Entry(it.day?.toFloat()?:0F, it.bpm?.toFloat()?:0F))
                 }
                 3 -> {
                     val times = it.times?.split(":")
                     val h = times?.get(0)
-                    values1.add(Entry(h?.toFloat()?:1F, it.spo?.toFloat()?:0F))
-                    values2.add(Entry(h?.toFloat()?:1970F, it.bpm?.toFloat()?:0F))
+                    values1.add(Entry(h?.toFloat()?:0F, it.spo?.toFloat()?:0F))
+                    values2.add(Entry(h?.toFloat()?:0F, it.bpm?.toFloat()?:0F))
                 }
             }
         }
-        val d1 = LineDataSet(values1, "Spo2")
+        val count = this.getBottomCount(type)
+        val val1 = ArrayList<Entry>()
+        val val2 = ArrayList<Entry>()
+        p@for(i in 1..count){
+            var index = -1
+             c@for(j in 0 until values1.size){
+                 if(values1[j].x.toInt() == i){
+                     index = j
+                     break@c
+                 }
+             }
+            if(index >= 0){
+                val1.add(values1[index])
+                val2.add(values2[index])
+            }else{
+                val1.add(Entry(i.toFloat(), 0F))
+                val2.add(Entry(i.toFloat(), 0F))
+            }
+        }
+
+        val d1 = LineDataSet(val1, "Spo2")
         d1.lineWidth = 2.5f
         d1.circleRadius = 4.5f
         d1.highLightColor = Color.rgb(244, 117, 117)
         d1.setDrawValues(false)
 
-        val d2 = LineDataSet(values2, "BPM")
+        val d2 = LineDataSet(val2, "BPM")
         d2.lineWidth = 2.5f
         d2.circleRadius = 4.5f
         d2.highLightColor = Color.rgb(244, 117, 117)
@@ -168,7 +194,6 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         val sets = ArrayList<ILineDataSet>()
         sets.add(d1)
         sets.add(d2)
-
         return LineData(sets)
     }
 
@@ -249,7 +274,8 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
             bloinfo?.apply {
                 list.addAll(this)
                 viewDelegate.adapter.notifyDataSetChanged()
-                viewDelegate.fillDataToChart(generateDataLine(type))
+
+                viewDelegate.fillDataToChart(generateDataLine(type), getBottomCount(type))
                 if(type == 1){
                     if(this.isEmpty()) return
                     getMonth(this, "${this[0].year}")
@@ -260,6 +286,13 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
             }
         }
     }
+
+    private fun getBottomCount(type: Int) : Int = when(type){
+            1 -> 12
+            2 -> TimeUtils.getDaysOfMonth(yearList[this.ah_year.selectedItemPosition], monthList[this.ah_month.selectedItemPosition])
+            3 -> 24
+            else -> 12
+        }
 
     /**
      * 获取年份

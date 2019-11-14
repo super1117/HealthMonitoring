@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zero.healthmonitoring.R
+import com.zero.healthmonitoring.data.UserBean
 import com.zero.library.base.BaseRvAdapter
 import com.zero.library.base.BaseViewHolder
 
@@ -34,21 +35,23 @@ import com.zero.library.base.BaseViewHolder
 /**
  * create by szl on 2019-11-06
  */
-class PersonDataAdapter(rv: RecyclerView) : BaseRvAdapter<String>(rv){
+class PersonDataAdapter(rv: RecyclerView) : BaseRvAdapter<UserBean>(rv){
 
     override fun onLayoutRes(position: Int): Int = R.layout.activity_data_person
 
-    override fun bindData(holder: BaseViewHolder?, position: Int, data: String?) {
+    override fun bindData(holder: BaseViewHolder?, position: Int, data: UserBean?) {
         holder?.apply{
-            getView<TextView>(R.id.adp_name)?.text = data
-            getView<ImageView>(R.id.adp_icon)?.imageTintList = ColorStateList.valueOf(mContext.resources.getColor(when(position % 5){
-                0 -> R.color.google_blue
-                1 -> R.color.google_green
-                2 -> R.color.google_yellow
-                3 -> R.color.google_red
-                else -> R.color.gray
-            }))
-            getView<TextView>(R.id.adp_age)?.text = "${position}岁"
+            data?.apply {
+                getView<TextView>(R.id.adp_name)?.text = name?:mobile
+                    getView<ImageView>(R.id.adp_icon)?.imageTintList = ColorStateList.valueOf(mContext.resources.getColor(when(position % 5){
+                    0 -> R.color.google_blue
+                    1 -> R.color.google_green
+                    2 -> R.color.google_yellow
+                    3 -> R.color.google_red
+                    else -> R.color.gray
+                }))
+                getView<TextView>(R.id.adp_age)?.text = "${age?:0}岁"
+            }
         }
     }
 

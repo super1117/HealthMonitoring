@@ -24,6 +24,7 @@ package com.zero.library.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -61,5 +62,22 @@ public class TimeUtils {
      */
     public static String getTimeNow(String pattern){
         return new SimpleDateFormat(pattern).format(new Date());
+    }
+
+    /**\
+     * 获取月的天数
+     * @param year
+     * @param month
+     * @return
+     */
+    public static int getDaysOfMonth(String year, String month) {
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(sdf.parse(year + "-" + month));
+            return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        }catch (Exception e){
+            return 30;
+        }
     }
 }
