@@ -1,5 +1,6 @@
 package com.zero.healthmonitoring.presenter
 
+import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import com.zero.healthmonitoring.R
@@ -35,7 +36,11 @@ class LoginPresenter : BasePresenter<LoginDelegate>(){
         when(it.id){
             R.id.login_btn -> this.login()
             R.id.login_register -> this.start(RegisterPresenter::class.java)
-            R.id.login_forget -> start(ForgetPwPresenter::class.java)
+            R.id.login_forget -> {
+                val data = Bundle()
+                data.putString("from", "login")
+                start(ForgetPwPresenter::class.java, data)
+            }
         }
     }
 
@@ -47,7 +52,7 @@ class LoginPresenter : BasePresenter<LoginDelegate>(){
             return
         }
         val params = HashMap<String, String>()
-        params["uid"] = this.login_account.text.toString()
+        params["mobile"] = this.login_account.text.toString()
         params["pwd"] = this.login_password.text.toString()
         SystemApi.provideService()
             .login(params)

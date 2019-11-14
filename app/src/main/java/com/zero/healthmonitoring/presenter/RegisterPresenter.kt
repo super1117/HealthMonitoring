@@ -8,6 +8,7 @@ import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.delegate.RegisterDelegate
 import com.zero.healthmonitoring.extend.toast
 import com.zero.library.network.RxSubscribe
+import com.zero.library.widget.snakebar.Prompt
 
 class RegisterPresenter : BasePresenter<RegisterDelegate>(){
 
@@ -15,25 +16,40 @@ class RegisterPresenter : BasePresenter<RegisterDelegate>(){
         this.supportActionBar?.title = "注册"
     }
 
-    override fun bindEventListener() {
-        super.bindEventListener()
-    }
-
-    private val onClick = View.OnClickListener {
-        when(it.id){
-            R.id.register_btn -> this@RegisterPresenter.submit()
-        }
-    }
-
-    private fun submit(){
-        val param = HashMap<String, String>()
+    fun submit(mobile: String, code: String, docid: String?, pw: String){
+        val params = HashMap<String, String?>()
+        params["type"] = "1"
+        params["mobile"] = mobile
+        params["code"] = code
+        params["docid"] = docid
+        params["pwd"] = pw
         SystemApi.provideService()
-            .register(param)
+            .registerOrForget(params)
             .compose(RxHelper.applySchedulers())
-            .subscribe(object : RxSubscribe<UserBean>(this.viewDelegate, true){
-                override fun _onNext(t: UserBean?) {
+            .subscribe(object : RxSubscribe<String>(this.viewDelegate, true){
+                override fun _onNext(t: String?) {
                     toast(this@RegisterPresenter, "注册成功")
                     finish()
+                }
+
+                override fun _onError(message: String?) {
+
+                }
+
+            })
+    }
+
+    fun getVerifyCode(mobile: String){
+        val params = HashMap<String, String>()
+        params["type"] = "register"
+        params["mobile"] = mobile
+        SystemApi.provideService()
+            .getVerifyCode(params)
+            .compose(RxHelper.applySchedulers())
+            .subscribe(object : RxSubscribe<String>(this.viewDelegate, true){
+
+                override fun _onNext(t: String?) {
+                    viewDelegate?.snakebar("已发送", Prompt.SUCCESS)
                 }
 
                 override fun _onError(message: String?) {

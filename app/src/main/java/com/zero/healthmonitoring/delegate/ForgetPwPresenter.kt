@@ -1,5 +1,8 @@
 package com.zero.healthmonitoring.delegate
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.text.TextUtils
 import android.view.View
 import com.zero.healthmonitoring.ActivityManager
@@ -41,9 +44,21 @@ import kotlinx.android.synthetic.main.activity_pw_forget.view.*
  */
 class ForgetPwPresenter : BasePresenter<ForgetPwDelegate>(){
 
+    companion object{
+        fun start(context: Context, from: String){
+            val intent = Intent(context, ForgetPwPresenter::class.java)
+            intent.putExtra("from", from)
+            context.startActivity(intent)
+        }
+    }
+
     override fun doMain() {
         supportActionBar?.title = "修改密码"
-
+        if(TextUtils.equals(intent.getStringExtra("from"), "person")){
+            this.forget_verify_btn.visibility = View.GONE
+            this.forget_verify.visibility = View.GONE
+            this.forget_verify_text.visibility = View.GONE
+        }
     }
 
     override fun bindEventListener() {
@@ -61,9 +76,9 @@ class ForgetPwPresenter : BasePresenter<ForgetPwDelegate>(){
         if(this.forget_mobile.text.toString().isEmpty()){
             return
         }
-//        if(forget_verify.text.toString().isEmpty()){
-//            return
-//        }
+        if(!TextUtils.equals(intent.getStringExtra("from"), "person") && this.forget_verify.text.toString().isEmpty()){
+            return
+        }
         if(this.forget_password.text.toString().isEmpty()){
             return
         }
@@ -74,21 +89,25 @@ class ForgetPwPresenter : BasePresenter<ForgetPwDelegate>(){
             viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
             return
         }
-        this.onSubmit()
+        viewDelegate.showLoading()
+        if(TextUtils.equals(intent.getStringExtra("from"), "person")){
+            this.onSubmit()
+        }else{
+            this.onSubmitByCode()
+        }
     }
 
     private fun onSubmit(){
         val params = HashMap<String, String>()
-        params["uid"] = this.forget_mobile.text.toString()
+        params["uid"] = this.user?.uid?:""
         params["pwd"] = this.forget_password.text.toString()
         SystemApi.provideService()
             .editPw(params)
             .compose(RxHelper.applySchedulers())
-            .subscribe(object : RxSubscribe<String>(this.viewDelegate, true){
+            .subscribe(object : RxSubscribe<String>(this.viewDelegate, false){
 
                 override fun _onNext(t: String?) {
                     viewDelegate?.snakebar("修改成功，请重新登录", Prompt.SUCCESS)
-                    viewDelegate?.showLoading()
                     viewDelegate?.rootView?.postDelayed({
                         viewDelegate?.dismissLoading()
                         ActivityManager.instance.finishAllActivity()
@@ -97,8 +116,36 @@ class ForgetPwPresenter : BasePresenter<ForgetPwDelegate>(){
                 }
 
                 override fun _onError(message: String?) {
-
+                    viewDelegate?.dismissLoading()
                 }
+            })
+    }
+
+    private fun onSubmitByCode(){
+        val params = HashMap<String, String>()
+        params["type"] = "2"
+        params["mobile"] = this.forget_mobile.text.toString()
+        params["code"] = this.forget_verify.text.toString()
+        params["pwd"] = this.forget_password.text.toString()
+        SystemApi.provideService()
+            .registerOrForget(params)
+            .compose(RxHelper.applySchedulers())
+            .subscribe(object : RxSubscribe<String>(this.viewDelegate, false){
+
+                override fun _onNext(t: String?) {
+                    viewDelegate?.apply {
+                        snakebar("修改成功，请重新登录", Prompt.SUCCESS)
+                        rootView.postDelayed({
+                            dismissLoading()
+                            getActivity<Activity>()?.finish()
+                        }, 3000)
+                    }
+                }
+
+                override fun _onError(message: String?) {
+                    viewDelegate?.dismissLoading()
+                }
+
             })
     }
 }

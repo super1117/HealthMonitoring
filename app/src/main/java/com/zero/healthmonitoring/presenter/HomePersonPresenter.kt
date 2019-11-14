@@ -1,5 +1,6 @@
 package com.zero.healthmonitoring.presenter
 
+import android.os.Bundle
 import android.view.View
 import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.base.BaseFragmentPresenter
@@ -50,7 +51,11 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
     private val onClick = View.OnClickListener {
         when(it.id){
             R.id.person_spo_record -> readyGo(HistoryPresenter::class.java)
-            R.id.person_update_pw -> readyGo(ForgetPwPresenter::class.java)
+            R.id.person_update_pw -> {
+                val data = Bundle()
+                data.putString("from", "person")
+                readyGo(ForgetPwPresenter::class.java, data)
+            }
         }
     }
 
