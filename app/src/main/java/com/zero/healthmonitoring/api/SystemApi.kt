@@ -3,6 +3,7 @@ package com.zero.healthmonitoring.api
 import android.util.Log
 import com.zero.healthmonitoring.provide.Config
 import com.zero.library.network.JsonConverterFactory
+import com.zero.library.utils.GsonUtil
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -19,7 +20,7 @@ class SystemApi {
                 .addInterceptor {chain ->
                     val request = chain.request().newBuilder().build()
                     Log.e("aiya", "*********************************************************************************")
-                    Log.e("aiya", "* ${request.url()}")
+                    Log.e("aiya", "* request: ${GsonUtil.setBeanToJson(request)}")
                     Log.e("aiya", "*********************************************************************************")
                     Log.e("aiya", "\n")
                     chain.proceed(request)

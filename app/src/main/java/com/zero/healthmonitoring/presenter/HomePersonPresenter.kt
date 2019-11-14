@@ -41,6 +41,7 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
         this.viewDelegate.toolbar?.title = "我的"
         this.person_avatar.setImageResource(R.drawable.icon_launcher)
         this.person_mobile.text = this.user?.uid?:resources.getString(R.string.app_name )
+        this.person_spo_record.text = if(this.user?.is_doctor?:0 == 1) "使用者数据" else "血氧历史记录"
     }
 
     override fun bindEvenListener() {
@@ -50,7 +51,13 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
 
     private val onClick = View.OnClickListener {
         when(it.id){
-            R.id.person_spo_record -> readyGo(PersonDataPresenter::class.java)
+            R.id.person_spo_record -> {
+                if(this.user?.is_doctor?:0 == 1){
+                    readyGo(PersonDataPresenter::class.java)
+                }else{
+                    readyGo(HistoryPresenter::class.java)
+                }
+            }
             R.id.person_update_pw -> {
                 val data = Bundle()
                 data.putString("from", "person")

@@ -1,5 +1,6 @@
 package com.zero.healthmonitoring.presenter
 
+import android.os.Bundle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.api.RxHelper
@@ -48,7 +49,11 @@ class PersonDataPresenter : BasePresenter<PersonDataDelegate>(){
 
     override fun bindEventListener() {
         super.bindEventListener()
-        this.viewDelegate.adapter.setOnItemClickListener { parent, itemView, position -> start(HistoryPresenter::class.java) }
+        this.viewDelegate.adapter.setOnItemClickListener { _, _, position ->
+            val data = Bundle()
+            data.putString("uid", list[position].uid)
+            start(HistoryPresenter::class.java, data)
+        }
     }
 
     private fun getData(){
