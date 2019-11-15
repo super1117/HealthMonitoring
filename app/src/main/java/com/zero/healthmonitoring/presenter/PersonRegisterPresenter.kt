@@ -59,12 +59,12 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
     }
 
     private fun onSubmit(){
-//        if(this.register_name.text.toString().isEmpty()){
-//            return
-//        }
-//        if(this.register_age.text.toString().isEmpty()){
-//            return
-//        }
+        if(this.register_name.text.toString().isEmpty()){
+            return
+        }
+        if(this.register_age.text.toString().isEmpty()){
+            return
+        }
         if(this.register_verify.text.toString().isEmpty()){
             return
         }
@@ -84,7 +84,10 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
             viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
             return
         }
-        (this.activity as RegisterPresenter).submit(this.register_mobile.text.toString(),
+        (this.activity as RegisterPresenter).submit(
+            this.register_name.text.toString(),
+            this.register_age.text.toString(),
+            this.register_mobile.text.toString(),
             this.register_verify.text.toString(),
             this.register_doctor_id.text.toString(),
             this.register_password.text.toString())

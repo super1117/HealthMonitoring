@@ -44,7 +44,7 @@ class HistoryDelegate : AppDelegate(){
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(true)
         xAxis.setLabelCount(count, false)
-//        xAxis.labelRotationAngle = -45f
+        xAxis.labelRotationAngle = if(count > 12) 45f else 0f
         xAxis.axisMinimum = 0f
 
         val leftAxis = this.ahChart.axisLeft

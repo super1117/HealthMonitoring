@@ -10,10 +10,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.zero.library.mvp.view.AppDelegate
 import androidx.appcompat.app.AppCompatActivity
 import com.zero.healthmonitoring.R
-import com.zero.healthmonitoring.presenter.HomePersonPresenter
-import com.zero.healthmonitoring.presenter.HomePresenter
-import com.zero.healthmonitoring.presenter.PersonPresenter
-import com.zero.healthmonitoring.presenter.SpoJavaPresenter
+import com.zero.healthmonitoring.data.UserBean
+import com.zero.healthmonitoring.presenter.*
+import com.zero.library.utils.GsonUtil
+import com.zero.library.utils.SPUtil
 
 
 ////////////////////////////////////////////////////////////////////
@@ -59,8 +59,12 @@ class MainDelegate : AppDelegate(){
 //
         val nav = this.get<BottomNavigationView>(R.id.view_navigation_main)
         nav.setOnNavigationItemSelectedListener(this.mOnNavigationItemSelectedListener)
-
-        this.fragments.add(SpoJavaPresenter())
+        val user = GsonUtil.setJsonToBean(SPUtil.get(getActivity(), "user", "").toString(), UserBean::class.java)
+        if (user?.is_doctor == 1){
+            fragments.add(PersonDataPresenter())
+        }else{
+            this.fragments.add(SpoJavaPresenter())
+        }
         this.fragments.add(HomePersonPresenter())
         this.contentPager.offscreenPageLimit = 2
         this.contentPager.adapter = object : FragmentStatePagerAdapter(this.getActivity<AppCompatActivity>().supportFragmentManager) {

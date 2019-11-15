@@ -3,6 +3,7 @@ package com.zero.healthmonitoring.delegate
 import android.app.Activity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.adapter.PersonDataAdapter
 import com.zero.library.mvp.view.AppDelegate
@@ -42,7 +43,7 @@ class PersonDataDelegate : AppDelegate(){
     override fun initWidget() {
         super.initWidget()
         this.rootView.setBackgroundColor(this.getActivity<Activity>().resources.getColor(R.color.bg_default))
-
+        this.get<SwipeRefreshLayout>(R.id.refresh).setOnRefreshListener { get<SwipeRefreshLayout>(R.id.refresh).isRefreshing = false }
         val rv: RecyclerView = this.get(R.id.rv)
         val manager = LinearLayoutManager(this.getActivity())
         manager.orientation = RecyclerView.VERTICAL

@@ -1,9 +1,11 @@
 package com.zero.healthmonitoring.presenter
 
+import androidx.core.view.get
 import com.zero.healthmonitoring.delegate.MainDelegate
 import com.zero.library.bean.ConfigBean
 import com.zero.library.network.config.ConfigApi
 import com.zero.library.utils.GsonUtil
+import kotlinx.android.synthetic.main.app_bar_main.*
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -14,6 +16,7 @@ import kotlin.system.exitProcess
 class MainActivity : BasePresenter<MainDelegate>() {
 
     override fun doMain() {
+        this.view_navigation_main.menu[0].title = if(this.user?.is_doctor?:0 == 1) "使用者数据" else "首页"
         this.getConfig()
     }
 

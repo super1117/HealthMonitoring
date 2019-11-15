@@ -13,6 +13,7 @@ import com.zero.healthmonitoring.presenter.BasePresenter
 import com.zero.healthmonitoring.presenter.LoginPresenter
 import com.zero.library.network.RxSubscribe
 import com.zero.library.widget.snakebar.Prompt
+import kotlinx.android.synthetic.main.activity_demo.*
 import kotlinx.android.synthetic.main.activity_pw_forget.*
 import kotlinx.android.synthetic.main.activity_pw_forget.view.*
 
@@ -61,13 +62,35 @@ class ForgetPwPresenter : BasePresenter<ForgetPwDelegate>(){
 
     override fun bindEventListener() {
         super.bindEventListener()
-        this.viewDelegate.setOnClickListener(this.onClick, R.id.forget_btn)
+        this.viewDelegate.setOnClickListener(this.onClick, R.id.forget_btn, R.id.forget_verify_btn)
     }
 
     private val onClick = View.OnClickListener {
         when(it.id){
             R.id.forget_btn -> this.verifyData()
+            R.id.forget_verify_btn -> this.getCode()
         }
+    }
+
+    private fun getCode(){
+        if(this.forget_mobile.text.toString().isEmpty()){
+            return
+        }
+        val params = HashMap<String, String>()
+        params["type"] = "forget"
+        params["mobile"] = this.forget_mobile.text.toString()
+        SystemApi.provideService()
+            .getVerifyCode(params)
+            .compose(RxHelper.applySchedulers())
+            .subscribe(object : RxSubscribe<String>(this.viewDelegate, true){
+                override fun _onNext(t: String?) {
+                    viewDelegate?.snakebar("已发送", Prompt.SUCCESS)
+                }
+
+                override fun _onError(message: String?) {
+
+                }
+            })
     }
 
     private fun verifyData(){

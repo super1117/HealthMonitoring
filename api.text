@@ -1,3 +1,5 @@
+jks:123456 health 123456
+
 登录接口:http://101.201.53.157/blood/login/index 参数：uid、pwd 成功返回uid失败返回文字信息
 注册接口:http://101.201.53.157/blood/login/register 参数：uid、pwd、docid 成功返回uid失败返回文字信息
 增加记录接口:http://101.201.53.157/blood/user/add_info 参数：uid、spo、bpm 成功返回1失败返回文字信息

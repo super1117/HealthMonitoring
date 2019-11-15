@@ -6,6 +6,7 @@ import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.base.BaseFragmentPresenter
 import com.zero.healthmonitoring.delegate.ForgetPwPresenter
 import com.zero.healthmonitoring.delegate.HomePersonDelegate
+import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_home_person.*
 import kotlinx.android.synthetic.main.fragment_home_person.view.*
 
@@ -53,7 +54,8 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
         when(it.id){
             R.id.person_spo_record -> {
                 if(this.user?.is_doctor?:0 == 1){
-                    readyGo(PersonDataPresenter::class.java)
+//                    readyGo(PersonDataPresenter::class.java)
+                    (activity as MainActivity).view_pager_main.setCurrentItem(0, true)
                 }else{
                     readyGo(HistoryPresenter::class.java)
                 }

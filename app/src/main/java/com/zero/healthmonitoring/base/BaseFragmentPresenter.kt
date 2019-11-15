@@ -32,6 +32,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.data.UserBean
 import com.zero.healthmonitoring.presenter.BasePresenter
@@ -50,7 +51,7 @@ abstract class BaseFragmentPresenter<T : AppDelegate> : FragmentPresenter<T>() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         if(view?.findViewById<View>(R.id.refresh) != null){
-            this.refresh.setColorSchemeResources(R.color.colorAccent)
+            this.viewDelegate.get<SwipeRefreshLayout>(R.id.refresh).setColorSchemeResources(R.color.colorAccent)
         }
         return view
     }
