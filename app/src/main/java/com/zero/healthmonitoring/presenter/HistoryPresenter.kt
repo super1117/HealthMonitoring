@@ -45,9 +45,13 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
     private var isTouchSpinner = false
 
+    private lateinit var userId: String
+
+
     override fun doMain() {
         this.supportActionBar?.title = "历史记录"
         this.list = this.viewDelegate.adapter.data
+        this.userId = this.intent.getStringExtra("uid")?:(this.user?.uid?:"")
 
         this.ah_year.prompt = "年"
         this.ah_month.prompt = "月"
@@ -209,7 +213,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
     private fun getListByYear(year: String){
         clearData()
         val param = HashMap<String, String?>()
-        param["uid"] = this.user?.uid
+        param["uid"] = this.userId
         param["year"] = year
         SystemApi.provideService()
             .getBloListByYear(param)
@@ -227,7 +231,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
     private fun getListByMonty(month: String, year: String){
         val params = HashMap<String, String>()
-        params["uid"] = this.user?.uid!!
+        params["uid"] = this.userId
         params["year"] = year
         params["month"] = month
         SystemApi.provideService()
@@ -248,7 +252,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
     private fun getListByDay(day: String, month: String, year: String){
         val params = HashMap<String, String>()
-        params["uid"] = this.user?.uid.toString()
+        params["uid"] = this.userId
         params["year"] = year
         params["month"] = month
         params["day"] = day
@@ -298,28 +302,26 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
      * 获取年份
      */
     private fun getYears(){
-        this.user?.apply {
-            val params = HashMap<String, String>()
-            params["uid"] = this.uid.toString()
-            SystemApi.provideService()
-                .getYears(params)
-                .compose(RxHelper.applySchedulers())
-                .subscribe(object : RxSubscribe<List<String>>(this@HistoryPresenter.viewDelegate, false){
+        val params = HashMap<String, String>()
+        params["uid"] = this.userId
+        SystemApi.provideService()
+            .getYears(params)
+            .compose(RxHelper.applySchedulers())
+            .subscribe(object : RxSubscribe<List<String>>(this@HistoryPresenter.viewDelegate, false){
 
-                    override fun _onNext(t: List<String>?) {
-                        t?.let {
-                            yearList.clear()
-                            yearList.addAll(t)
-                            yearAdapter.notifyDataSetChanged()
-                        }
+                override fun _onNext(t: List<String>?) {
+                    t?.let {
+                        yearList.clear()
+                        yearList.addAll(t)
+                        yearAdapter.notifyDataSetChanged()
                     }
+                }
 
-                    override fun _onError(message: String?) {
+                override fun _onError(message: String?) {
 
-                    }
+                }
 
-                })
-        }
+            })
     }
 
     private fun getMonth(t: List<UserTestBean.BloinfoBean>, year: String){
