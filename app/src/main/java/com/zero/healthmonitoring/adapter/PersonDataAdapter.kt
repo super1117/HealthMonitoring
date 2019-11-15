@@ -42,7 +42,7 @@ class PersonDataAdapter(rv: RecyclerView) : BaseRvAdapter<UserBean>(rv){
     override fun bindData(holder: BaseViewHolder?, position: Int, data: UserBean?) {
         holder?.apply{
             data?.apply {
-                getView<TextView>(R.id.adp_name)?.text = name?:mobile
+                getView<TextView>(R.id.adp_name)?.text = uid?:mobile
                     getView<ImageView>(R.id.adp_icon)?.imageTintList = ColorStateList.valueOf(mContext.resources.getColor(when(position % 5){
                     0 -> R.color.google_blue
                     1 -> R.color.google_green
@@ -50,7 +50,7 @@ class PersonDataAdapter(rv: RecyclerView) : BaseRvAdapter<UserBean>(rv){
                     3 -> R.color.google_red
                     else -> R.color.gray
                 }))
-                getView<TextView>(R.id.adp_age)?.text = "${age?:0}岁"
+//                getView<TextView>(R.id.adp_age)?.text = "${age?:0}岁"
             }
         }
     }

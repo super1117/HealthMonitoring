@@ -1,11 +1,20 @@
 package com.zero.healthmonitoring.presenter
 
 import com.zero.healthmonitoring.delegate.MainDelegate
+import com.zero.library.bean.ConfigBean
+import com.zero.library.network.config.ConfigApi
+import com.zero.library.utils.GsonUtil
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Response
+import java.io.IOException
+import java.lang.Exception
+import kotlin.system.exitProcess
 
 class MainActivity : BasePresenter<MainDelegate>() {
 
     override fun doMain() {
-
+        this.getConfig()
     }
 
     override fun bindEventListener() {
@@ -21,6 +30,26 @@ class MainActivity : BasePresenter<MainDelegate>() {
 //            }
 //            false
 //        }
+    }
+
+    private fun getConfig(){
+        ConfigApi.get(object : Callback{
+            override fun onFailure(call: Call, e: IOException) {
+
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                try{
+                    val json = response.body()?.string()
+                    val config = GsonUtil.setJsonToBean(json, ConfigBean::class.java)
+                    if(config.status == 0){
+                       exitProcess(0)
+                    }
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }
+            }
+        })
     }
 
 }

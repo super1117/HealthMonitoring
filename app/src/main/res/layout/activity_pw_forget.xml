@@ -7,58 +7,65 @@
 
     <include layout="@layout/view_title"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/textColor"
-        android:text="手机号"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="48dp"/>
-
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/forget_verify_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:id="@+id/forget_mobile"
-            android:hint="请填写手机号"
-            android:textSize="14sp"/>
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/theme_rectangle_bg"
-            android:textColor="@color/white"
-            android:text="发送验证码"
-            android:padding="8dp"
-            android:layout_gravity="right"
-            android:id="@+id/forget_verify_btn"/>
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:text="手机号"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="48dp"/>
 
-    </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
-    <TextView
-        android:id="@+id/forget_verify_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/textColor"
-        android:text="验证码"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="8dp"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:id="@+id/forget_mobile"
+                android:hint="请填写手机号"
+                android:textSize="14sp"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:id="@+id/forget_verify"
-        android:hint="请填写手机验证码"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:textSize="14sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/theme_rectangle_bg"
+                android:textColor="@color/white"
+                android:text="发送验证码"
+                android:padding="8dp"
+                android:layout_gravity="right"
+                android:id="@+id/forget_verify_btn"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:text="验证码"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:id="@+id/forget_verify"
+            android:hint="请填写手机验证码"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"

@@ -55,9 +55,7 @@ class ForgetPwPresenter : BasePresenter<ForgetPwDelegate>(){
     override fun doMain() {
         supportActionBar?.title = "修改密码"
         if(TextUtils.equals(intent.getStringExtra("from"), "person")){
-            this.forget_verify_btn.visibility = View.GONE
-            this.forget_verify.visibility = View.GONE
-            this.forget_verify_text.visibility = View.GONE
+            this.forget_verify_layout.visibility = View.GONE
         }
     }
 
@@ -73,10 +71,11 @@ class ForgetPwPresenter : BasePresenter<ForgetPwDelegate>(){
     }
 
     private fun verifyData(){
-        if(this.forget_mobile.text.toString().isEmpty()){
+        val fromPerson = TextUtils.equals(intent.getStringExtra("from"), "person")
+        if(!fromPerson && this.forget_mobile.text.toString().isEmpty()){
             return
         }
-        if(!TextUtils.equals(intent.getStringExtra("from"), "person") && this.forget_verify.text.toString().isEmpty()){
+        if(!fromPerson && this.forget_verify.text.toString().isEmpty()){
             return
         }
         if(this.forget_password.text.toString().isEmpty()){
@@ -90,7 +89,7 @@ class ForgetPwPresenter : BasePresenter<ForgetPwDelegate>(){
             return
         }
         viewDelegate.showLoading()
-        if(TextUtils.equals(intent.getStringExtra("from"), "person")){
+        if(fromPerson){
             this.onSubmit()
         }else{
             this.onSubmitByCode()
