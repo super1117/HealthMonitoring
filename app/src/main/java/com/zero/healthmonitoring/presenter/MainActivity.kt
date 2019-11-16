@@ -55,4 +55,12 @@ class MainActivity : BasePresenter<MainDelegate>() {
         })
     }
 
+    override fun onBackPressed() {
+        if(this.view_pager_main.currentItem != 0){
+            this.view_pager_main.setCurrentItem(0, true)
+        }else{
+            super.onBackPressed()
+        }
+    }
+
 }

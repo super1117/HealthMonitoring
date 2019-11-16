@@ -2,10 +2,12 @@ package com.zero.healthmonitoring.presenter
 
 import android.os.Bundle
 import android.view.View
+import com.zero.healthmonitoring.ActivityManager
 import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.base.BaseFragmentPresenter
 import com.zero.healthmonitoring.delegate.ForgetPwPresenter
 import com.zero.healthmonitoring.delegate.HomePersonDelegate
+import com.zero.library.utils.SPUtil
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_home_person.*
 import kotlinx.android.synthetic.main.fragment_home_person.view.*
@@ -40,14 +42,12 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
 
     override fun doMain() {
         this.viewDelegate.toolbar?.title = "我的"
-        this.person_avatar.setImageResource(R.drawable.icon_launcher)
-        this.person_mobile.text = this.user?.uid?:resources.getString(R.string.app_name )
         this.person_spo_record.text = if(this.user?.is_doctor?:0 == 1) "使用者数据" else "血氧历史记录"
     }
 
     override fun bindEvenListener() {
         super.bindEvenListener()
-        this.viewDelegate.setOnClickListener(this.onClick, R.id.person_spo_record, R.id.person_update_pw)
+        this.viewDelegate.setOnClickListener(this.onClick, R.id.person_spo_record, R.id.person_update_pw, R.id.person_exit)
     }
 
     private val onClick = View.OnClickListener {
@@ -64,6 +64,11 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
                 val data = Bundle()
                 data.putString("from", "person")
                 readyGo(ForgetPwPresenter::class.java, data)
+            }
+            R.id.person_exit -> {
+                SPUtil.remove(activity, "user")
+                ActivityManager.instance.finishAllActivity()
+                readyGo(LoginPresenter::class.java)
             }
         }
     }
