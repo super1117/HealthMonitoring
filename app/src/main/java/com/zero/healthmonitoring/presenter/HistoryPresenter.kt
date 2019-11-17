@@ -142,7 +142,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
         val values1 = ArrayList<Entry>()
         val values2 = ArrayList<Entry>()
 
-        for(i in list.indices.reversed()){
+        for(i in 0 until list.size){
             val it = list[i]
             when(type){
                 1 -> {
@@ -161,34 +161,35 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
                 }
             }
         }
+        Log.e("aiya", "-------- ${list.size}")
         //没有测量数据的日期填充为0
-//        val count = this.getBottomCount(type)
-//        val val1 = ArrayList<Entry>()
-//        val val2 = ArrayList<Entry>()
-//        p@for(i in 1..count){
-//            var index = -1
-//             c@for(j in 0 until values1.size){
-//                 if(values1[j].x.toInt() == i){
-//                     index = j
-//                     break@c
-//                 }
-//             }
-//            if(index >= 0){
-//                val1.add(values1[index])
-//                val2.add(values2[index])
-//            }else{
-//                val1.add(Entry(i.toFloat(), 0F))
-//                val2.add(Entry(i.toFloat(), 0F))
-//            }
-//        }
+        val count = this.getBottomCount(type)
+        val val1 = ArrayList<Entry>()
+        val val2 = ArrayList<Entry>()
+        p@for(i in 1..count){
+            var index = -1
+             c@for(j in 0 until values1.size){
+                 if(values1[j].x.toInt() == i){
+                     index = j
+                     break@c
+                 }
+             }
+            if(index >= 0){
+                val1.add(values1[index])
+                val2.add(values2[index])
+            }else{
+                val1.add(Entry(i.toFloat(), 0F))
+                val2.add(Entry(i.toFloat(), 0F))
+            }
+        }
 
-        val d1 = LineDataSet(values1, "Spo2")
+        val d1 = LineDataSet(val1, "Spo2")
         d1.lineWidth = 2.5f
         d1.circleRadius = 4.5f
         d1.highLightColor = Color.rgb(244, 117, 117)
         d1.setDrawValues(false)
 
-        val d2 = LineDataSet(values2, "BPM")
+        val d2 = LineDataSet(val2, "BPM")
         d2.lineWidth = 2.5f
         d2.circleRadius = 4.5f
         d2.highLightColor = Color.rgb(244, 117, 117)

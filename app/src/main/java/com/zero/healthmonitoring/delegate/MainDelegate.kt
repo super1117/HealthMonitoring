@@ -82,7 +82,7 @@ class MainDelegate : AppDelegate(){
         this.contentPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageSelected(position: Int) {
                 if(position == 1) {
-                    nav.selectedItemId =  R.id.nav_user
+                    nav.selectedItemId = R.id.nav_user
                 }
 //                else {
 //                    R.id.nav_home
