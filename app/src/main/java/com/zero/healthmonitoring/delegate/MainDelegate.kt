@@ -1,5 +1,7 @@
 package com.zero.healthmonitoring.delegate
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -76,9 +78,15 @@ class MainDelegate : AppDelegate(){
                 return fragments.size
             }
         }
+
         this.contentPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageSelected(position: Int) {
-                nav.selectedItemId = if(position == 0) R.id.nav_home else R.id.nav_user
+                if(position == 1) {
+                    nav.selectedItemId =  R.id.nav_user
+                }
+//                else {
+//                    R.id.nav_home
+//                }
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -93,6 +101,7 @@ class MainDelegate : AppDelegate(){
 
             }
         })
+
 //        rootView.postDelayed({
 //            val toolbar = (fragments[0] as SpoJavaPresenter).viewDelegate?.toolbar
 //            val toggle = ActionBarDrawerToggle(this.getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -104,7 +113,8 @@ class MainDelegate : AppDelegate(){
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.nav_home -> {
-                contentPager.currentItem = 0
+//                contentPager.currentItem = 0
+                getActivity<Activity>().startActivity(Intent(getActivity(), HistoryPresenter::class.java))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_user -> {

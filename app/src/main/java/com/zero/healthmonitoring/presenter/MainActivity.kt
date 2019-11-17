@@ -1,6 +1,7 @@
 package com.zero.healthmonitoring.presenter
 
 import androidx.core.view.get
+import com.zero.healthmonitoring.R
 import com.zero.healthmonitoring.delegate.MainDelegate
 import com.zero.library.bean.ConfigBean
 import com.zero.library.network.config.ConfigApi
@@ -16,7 +17,7 @@ import kotlin.system.exitProcess
 class MainActivity : BasePresenter<MainDelegate>() {
 
     override fun doMain() {
-        this.view_navigation_main.menu[0].title = if(this.user?.is_doctor?:0 == 1) "使用者数据" else "首页"
+        this.view_navigation_main.menu[0].title = if(this.user?.is_doctor?:0 == 1) "使用者数据" else "数据"
         this.getConfig()
     }
 
@@ -33,6 +34,11 @@ class MainActivity : BasePresenter<MainDelegate>() {
 //            }
 //            false
 //        }
+        this.view_navigation_main.setOnNavigationItemReselectedListener {
+            if(it.itemId == R.id.nav_home){
+                start(HistoryPresenter::class.java)
+            }
+        }
     }
 
     private fun getConfig(){

@@ -41,12 +41,13 @@ import kotlinx.android.synthetic.main.fragment_home_person.view.*
 class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
 
     override fun doMain() {
-        this.viewDelegate.toolbar?.title = "我的"
+        this.viewDelegate.toolbar?.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         this.person_spo_record.text = if(this.user?.is_doctor?:0 == 1) "使用者数据" else "血氧历史记录"
     }
 
     override fun bindEvenListener() {
         super.bindEvenListener()
+        this.viewDelegate.toolbar?.setNavigationOnClickListener { (this.activity as MainActivity).view_pager_main.setCurrentItem(0, true) }
         this.viewDelegate.setOnClickListener(this.onClick, R.id.person_spo_record, R.id.person_update_pw, R.id.person_exit)
     }
 
