@@ -7,6 +7,7 @@ class SplashPresenter : BasePresenter<SplashDelegate>(){
     override fun doMain() {
         viewDelegate.rootView.postDelayed({
             start(if(user == null) LoginPresenter::class.java else MainActivity::class.java)
+            finish()
         }, 3000)
     }
 

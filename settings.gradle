@@ -1,2 +1,2 @@
-include ':app', ':lib'
+include ':app', ':lib', ':MPChartLib'
 rootProject.name='HealthMonitoring'

@@ -39,13 +39,14 @@ class HistoryDelegate : AppDelegate(){
     fun fillDataToChart(data: LineData, count: Int){
         Log.e("aiya", "count = $count")
         val xAxis = this.ahChart.xAxis
+        this.ahChart.setDataMax(count)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 //        xAxis.typeface = mTf
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(true)
 //        val c = data.dataSets[0].entryCount
-        xAxis.setLabelCount(count, false)
-        xAxis.labelRotationAngle = if(count > 12) 45f else 0f
+//        xAxis.setLabelCount(count, false)
+//        xAxis.labelRotationAngle = if(count > 12) 45f else 0f
         xAxis.axisMinimum = 0f
 
         val leftAxis = this.ahChart.axisLeft
