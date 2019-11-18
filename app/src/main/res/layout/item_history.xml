@@ -13,6 +13,7 @@
         android:textColor="@color/textColor"
         android:id="@+id/ih_time"
         android:layout_weight="1"
+        android:textSize="16sp"
         tools:text="@tools:sample/date/hhmmss"
         android:gravity="center_horizontal"/>
 
@@ -23,6 +24,7 @@
         android:id="@+id/ih_spo2"
         android:layout_weight="1"
         tools:text="98"
+        android:textSize="16sp"
         android:gravity="center_horizontal"/>
 
     <TextView
@@ -32,6 +34,7 @@
         android:id="@+id/ih_bpm"
         android:layout_weight="1"
         tools:text="60"
+        android:textSize="16sp"
         android:gravity="center_horizontal"/>
 
 </LinearLayout>

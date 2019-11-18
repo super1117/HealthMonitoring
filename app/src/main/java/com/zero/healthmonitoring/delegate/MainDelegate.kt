@@ -52,6 +52,8 @@ class MainDelegate : AppDelegate(){
 
     private val fragments = ArrayList<Fragment>()
 
+    private lateinit var user: UserBean
+
     override fun getRootLayoutId(): Int = R.layout.activity_main
 
     override fun initWidget() {
@@ -61,7 +63,7 @@ class MainDelegate : AppDelegate(){
 //
         val nav = this.get<BottomNavigationView>(R.id.view_navigation_main)
         nav.setOnNavigationItemSelectedListener(this.mOnNavigationItemSelectedListener)
-        val user = GsonUtil.setJsonToBean(SPUtil.get(getActivity(), "user", "").toString(), UserBean::class.java)
+        user = GsonUtil.setJsonToBean(SPUtil.get(getActivity(), "user", "").toString(), UserBean::class.java)
         if (user?.is_doctor == 1){
             fragments.add(PersonDataPresenter())
         }else{
@@ -113,8 +115,11 @@ class MainDelegate : AppDelegate(){
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.nav_home -> {
-//                contentPager.currentItem = 0
-                getActivity<Activity>().startActivity(Intent(getActivity(), HistoryPresenter::class.java))
+                if(user?.is_doctor == 1){
+                contentPager.currentItem = 0
+                }else{
+                    getActivity<Activity>().startActivity(Intent(getActivity(), HistoryPresenter::class.java))
+                }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.nav_user -> {
