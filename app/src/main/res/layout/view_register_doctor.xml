@@ -6,7 +6,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="72dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -15,7 +16,7 @@
             android:textColor="@color/textColor"
             android:text="手机号"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="16dp"/>
 
         <FrameLayout
             android:layout_width="match_parent"

@@ -34,9 +34,15 @@ class MainActivity : BasePresenter<MainDelegate>() {
 //            }
 //            false
 //        }
-        this.view_navigation_main.setOnNavigationItemReselectedListener {
-            if(it.itemId == R.id.nav_home){
-                start(HistoryPresenter::class.java)
+        if(this.user?.is_doctor != 1){
+            this.view_navigation_main.setOnNavigationItemReselectedListener {
+                if(it.itemId == R.id.nav_home){
+                    start(HistoryPresenter::class.java)
+                }else if(it.itemId == R.id.nav_user){
+                    if(view_pager_main.currentItem != 1){
+                        view_pager_main.setCurrentItem(1, true)
+                    }
+                }
             }
         }
     }
