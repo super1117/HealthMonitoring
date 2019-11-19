@@ -161,7 +161,6 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
                 }
             }
         }
-        Log.e("aiya", "-------- ${list.size}")
         //没有测量数据的日期填充为0
 //        val count = this.getBottomCount(type)
 //        val val1 = ArrayList<Entry>()
@@ -184,15 +183,17 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 //        }
 
         val d1 = LineDataSet(values1, "Spo2")
-        d1.lineWidth = 2.5f
-        d1.circleRadius = 4.5f
-        d1.highLightColor = Color.rgb(244, 117, 117)
+        d1.lineWidth = 1.8f
+        d1.circleRadius = 3.2f
+//        d1.highLightColor = Color.rgb(244, 117, 117)
+        d1.setDrawCircleHole(false)
         d1.setDrawValues(false)
 
         val d2 = LineDataSet(values2, "BPM")
-        d2.lineWidth = 2.5f
-        d2.circleRadius = 4.5f
-        d2.highLightColor = Color.rgb(244, 117, 117)
+        d2.lineWidth = 1.8f
+        d2.circleRadius = 3.2f
+//        d2.highLightColor = Color.rgb(244, 117, 117)
+        d2.setDrawCircleHole(false)
         d2.color = ColorTemplate.VORDIPLOM_COLORS[0]
         d2.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0])
         d2.setDrawValues(false)
