@@ -52,12 +52,14 @@ class HistoryDelegate : AppDelegate(){
         val leftAxis = this.ahChart.axisLeft
 //        leftAxis.typeface = mTf
         leftAxis.setLabelCount(5, false)
+        leftAxis.axisMaximum = 100f
         leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
         val rightAxis = this.ahChart.axisRight
 //        rightAxis.typeface = mTf
         rightAxis.setLabelCount(5, false)
         rightAxis.setDrawGridLines(false)
+        rightAxis.axisMaximum = 100f
         rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
         this.ahChart.data = data
