@@ -1,12 +1,24 @@
 package com.zero.healthmonitoring.presenter;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.bde.parentcyTransport.ACSUtility.*;
 import com.creative.FingerOximeter.FingerOximeter;
@@ -17,14 +29,13 @@ import com.creative.base.BaseDate.*;
 import com.creative.bluetooth.ble.BLEOpertion;
 import com.creative.bluetooth.ble.IBLECallBack;
 import com.zero.healthmonitoring.R;
+import com.zero.library.utils.GsonUtil;
 
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-/**
- * {@hide}
- */
 public class DemoMainActivity extends AppCompatActivity {
 
     // private WifiAdmin wifiadmin;
@@ -34,13 +45,40 @@ public class DemoMainActivity extends AppCompatActivity {
     private TextView tvWave;
     private TextView tvLog;
 
+    private BluetoothAdapter mBluetoothAdapter;
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+
+            String action = intent.getAction();
+            // 获得已经搜索到的蓝牙设备
+            if (action.equals(BluetoothDevice.ACTION_FOUND)) {
+                Log.e("aiya", "找到设备");
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                Log.e("aiya", device.getName() + "   :   " + device.getAddress());
+                // 搜索到的不是已经绑定的蓝牙设备
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    // 显示在TextView上
+                    tvLog.append(device.getName() + "   :   " + device.getAddress()+"\n");
+                }
+                // 搜索完成
+            } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+                setProgressBarIndeterminateVisibility(false);
+                setTitle("搜索蓝牙设备");
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_demo);
 
         try {
-            ble = new BLEOpertion(this, new BleCallBack());
+//            ble = new BLEOpertion(this, new BleCallBack());
             tvMsg = (TextView) findViewById(R.id.para);
             tvWave = (TextView) findViewById(R.id.wave);
             tvLog = findViewById(R.id.tv_log);
@@ -52,20 +90,85 @@ public class DemoMainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                v.setEnabled(false);
 //				ble.startDiscover();
-                ble.connect("84:EB:18:78:43:3E");
-                myHandler.obtainMessage(0, "开始连接").sendToTarget();
+//                ble.connect("84:EB:18:78:43:3E");
+//                myHandler.obtainMessage(0, "开始连接").sendToTarget();
+
+                setProgressBarIndeterminateVisibility(true);
+                setTitle("正在扫描....");
+                // 如果正在搜索，就先取消搜索
+                if (mBluetoothAdapter.isDiscovering()) {
+                    mBluetoothAdapter.cancelDiscovery();
+                }
+                // 开始搜索蓝牙设备,搜索到的蓝牙设备通过广播返回
+                mBluetoothAdapter.startDiscovery();
             }
         });
         findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                ble.disConnect();
-                myHandler.obtainMessage(0, "连接断开").sendToTarget();
+                findViewById(R.id.button2).setEnabled(true);
+//                ble.disConnect();
+//                myHandler.obtainMessage(0, "连接断开").sendToTarget();
+                mBluetoothAdapter.cancelDiscovery();
             }
         });
+////////////////////////////////////////////////////////////////////////////////////////////////////
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        // 获取所有已经绑定的蓝牙设备
+        Set<BluetoothDevice> devices = mBluetoothAdapter.getBondedDevices();
+        if (devices.size() > 0) {
+            for (BluetoothDevice bluetoothDevice : devices) {
+                tvLog.append(bluetoothDevice.getName() + "   :   "
+                        + bluetoothDevice.getAddress() + "\n\n");
+            }
+        }
+        // 注册用以接收到已搜索到的蓝牙设备的receiver
+        IntentFilter mFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(mReceiver, mFilter);
+        // 注册搜索完时的receiver
+        mFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        registerReceiver(mReceiver, mFilter);
+        requestPermission();
+    }
 
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        //解除注册
+        unregisterReceiver(mReceiver);
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkAccessFinePermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            if (checkAccessFinePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        0x110);
+                Log.e(getPackageName(), "没有权限，请求权限");
+                return;
+            }
+            Log.e(getPackageName(), "已有定位权限");
+            //这里可以开始搜索操作
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 0x110: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e(getPackageName(), "开启权限permission granted!");
+                    //这里可以开始搜索操作
+                } else {
+                    Log.e(getPackageName(), "没有定位权限，请先开启!");
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private Handler myHandler = new Handler() {
@@ -140,6 +243,9 @@ public class DemoMainActivity extends AppCompatActivity {
         @Override
         public void onDiscoveryCompleted(List<blePort> device) {
             tvLog.append("onDiscoveryCompleted \n");
+            if(device != null && device.size() > 0){
+                tvLog.append(GsonUtil.setBeanToJson(device));
+            }
         }
 
         @Override

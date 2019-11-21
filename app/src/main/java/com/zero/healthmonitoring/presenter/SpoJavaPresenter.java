@@ -1,14 +1,22 @@
 package com.zero.healthmonitoring.presenter;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.SeekBar;
+
+import androidx.annotation.NonNull;
 
 import com.bde.parentcyTransport.ACSUtility;
+import com.bde.parentcyTransport.ACSUtility.blePort;
 import com.creative.FingerOximeter.FingerOximeter;
 import com.creative.FingerOximeter.IFingerOximeterCallBack;
 import com.creative.base.BLEReader;
@@ -20,16 +28,13 @@ import com.zero.healthmonitoring.R;
 import com.zero.healthmonitoring.api.RxHelper;
 import com.zero.healthmonitoring.api.SystemApi;
 import com.zero.healthmonitoring.base.BaseFragmentPresenter;
-import com.zero.healthmonitoring.data.UserBean;
 import com.zero.healthmonitoring.delegate.SpoDelegate;
 import com.zero.library.network.RxSubscribe;
-import com.zero.library.utils.GsonUtil;
 import com.zero.library.utils.PermissionManager;
 import com.zero.library.widget.DrawableView;
 import com.zero.library.widget.snakebar.Prompt;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -49,16 +54,60 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
     private FingerOximeter pod;
 
+    private boolean isFindDeivce;
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BluetoothDevice.ACTION_FOUND)) {
+                Log.e("aiya", "找到设备");
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                Log.e("aiya", device.getName() + "   :   " + device.getAddress());
+                if(TextUtils.equals(device.getName(), "POD")){
+                    isFindDeivce = true;
+                    if(myHandler != null){
+                        myHandler.obtainMessage(0, "开始连接").sendToTarget();
+                    }
+                    if(bluetoothAdapter != null){
+                        bluetoothAdapter.cancelDiscovery();
+                    }
+                    if(ble != null){
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                super.run();
+                                ble.connect(device.getAddress());
+                            }
+                        }.start();
+                    }
+                }
+            } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+                if(!isFindDeivce){
+                    myHandler.obtainMessage(0, "未找到可连接设备").sendToTarget();
+                }
+            }
+        }
+    };
+
     @Override
     public void doMain() {
         this.viewDelegate.getToolbar().setTitle("血氧测试");
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         this.permissionManager = new PermissionManager(this.getActivity(), this);
-        if(!this.permissionManager.isRequestPermissions(PERMISSION_RESULT_CODE,
-                "android.permission.BLUETOOTH",
-                "android.permission.BLUETOOTH_ADMIN")){
+        if(!this.permissionManager.isRequestPermissions(
+                PERMISSION_RESULT_CODE,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.ACCESS_FINE_LOCATION)){
             this.openBluetooth();
         }
+        IntentFilter mFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        getActivity().registerReceiver(mReceiver, mFilter);
+        // 注册搜索完时的receiver
+        mFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        getActivity().registerReceiver(mReceiver, mFilter);
     }
 
     private void openBluetooth(){
@@ -77,6 +126,19 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
            }
         }, 1000);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_RESULT_CODE) {
+            if (!this.permissionManager.verifyPermissions(grantResults)) {
+                this.permissionManager.showMissingPermissionDialog(null);
+            } else {
+                openBluetooth();
+            }
+        }
+    }
+
 
     private Handler myHandler = new Handler(){
         @Override
@@ -110,8 +172,10 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                     break;
                 case 2:
 //                    ble.startDiscover();
-                    ble.connect("84:EB:18:78:43:3E");
-                    myHandler.obtainMessage(0, "开始连接").sendToTarget();
+//                    ble.connect("84:EB:18:78:43:3E");
+                    if(bluetoothAdapter != null){
+                        bluetoothAdapter.startDiscovery();
+                    }
                     break;
                 case 3:
                     String[] data = msg.obj.toString().split(" ");
@@ -151,13 +215,16 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
         if(ble != null){
             ble.disConnect();
         }
+        if(mReceiver != null){
+            getActivity().unregisterReceiver(mReceiver);
+        }
     }
 
     private class BleCallBack implements IBLECallBack{
 
         @Override
         public void onFindDevice(ACSUtility.blePort blePort) {
-//            viewDelegate.getTvLog().setText("onFindDevice" + blePort._device.getAddress() + " " + blePort._device.getName() + " " + blePort.devInfo + " \n");
+            myHandler.obtainMessage(0, "开始连接").sendToTarget();
             if(TextUtils.equals(blePort._device.getName(), "POD")){
                 ble.stopDiscover();
                 new Thread(){
@@ -172,23 +239,11 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
         @Override
         public void onDiscoveryCompleted(List<ACSUtility.blePort> device) {
-//            viewDelegate.getTvLog().append("onDiscoveryCompleted: \n");
-//            viewDelegate.getTvLog().append("***************************************************\n");
-//            if(device != null && device.size() > 0){
-//                for (ACSUtility.blePort d : device){
-//                    viewDelegate.getTvLog().append("* "+ d.devInfo +"\n");
-//                    viewDelegate.getTvLog().append("* " + GsonUtil.setBeanToJson(d._device) + " \n");
-//                }
-//            }
-//            viewDelegate.getTvLog().append("***************************************************\n");
+
         }
 
         @Override
         public void onConnected(ACSUtility.blePort blePort) {
-//            viewDelegate.getTvLog().append("onConnected \n" + blePort.devInfo + " \n");
-//            viewDelegate.getTvLog().append("***************************************************\n");
-//            viewDelegate.getTvLog().append(GsonUtil.setBeanToJson(blePort._device) + " \n");
-//            viewDelegate.getTvLog().append("***************************************************\n");
             if(myHandler != null){
                 myHandler.obtainMessage(0, "connected").sendToTarget();
                 pod = new FingerOximeter(new BLEReader(ble), new BLESender(ble), new FingerOximeterCallBack());
@@ -223,7 +278,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
         @Override
         public void onReadyForUse() {
-//            viewDelegate.getTvLog().append("onReadyForUse \n");
+
         }
     }
 
@@ -231,7 +286,6 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
         @Override
         public void OnGetSpO2Param(int nSpO2, int nPR, float nPI, boolean nStatus, int nMode, float nPower) {
-//            myHandler.obtainMessage(0, "接收到参数--" + nSpO2 + " " + nPR + " " + nPI).sendToTarget();
             if(myHandler != null){
                 myHandler.obtainMessage(3, nSpO2 + " " + nPR).sendToTarget();
             }

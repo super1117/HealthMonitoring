@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
@@ -22,6 +24,9 @@
         android:theme="@style/AppTheme">
 
         <service android:name="com.bde.parentcyTransport.ACSUtilityService" android:enabled="true" />
+        <activity android:name=".presenter.DemoMainActivity" >
+
+        </activity>
         <activity android:name=".presenter.SplashPresenter" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +40,6 @@
         <activity android:name=".presenter.SpoPresenter" />
         <activity android:name=".presenter.SpoJavaPresenter" />
         <activity android:name=".presenter.RecordPresenter" />
-        <activity android:name=".presenter.DemoMainActivity" />
         <activity android:name=".presenter.PersonDataPresenter"/>
         <activity android:name=".presenter.HistoryPresenter"/>
         <activity android:name=".delegate.ForgetPwPresenter"/>
