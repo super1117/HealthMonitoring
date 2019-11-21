@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -110,6 +111,26 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
         getActivity().registerReceiver(mReceiver, mFilter);
     }
 
+    @Override
+    protected void bindEvenListener() {
+        super.bindEvenListener();
+        viewDelegate.setOnClickListener(this.onClickListener, R.id.tv_status);
+    }
+
+    private View.OnClickListener onClickListener = new View.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.tv_status:
+                    myHandler.obtainMessage(0, "正在搜索设备...").sendToTarget();
+                    myHandler.sendEmptyMessageDelayed(2, 3000);
+                    break;
+                default:break;
+            }
+        }
+    };
+
     private void openBluetooth(){
         if(this.bluetoothAdapter != null && !this.bluetoothAdapter.isEnabled()){
             this.bluetoothAdapter.enable();
@@ -146,6 +167,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
             if(viewDelegate == null){
                 return;
             }
+            viewDelegate.getTvStatus().setClickable(false);
             switch (msg.what){
                 case 0:
                     if(TextUtils.equals(msg.obj.toString(), "connected")){
@@ -155,6 +177,10 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                         myHandler.sendEmptyMessage(4);
                     }else if(TextUtils.equals(msg.obj.toString(), "disconnect")){
                         viewDelegate.getTvStatus().setText("设备已断开");
+                        viewDelegate.getTvStatus().clearDrawable();
+                    }else if(TextUtils.equals(msg.obj.toString(), "success")){
+                        viewDelegate.getTvStatus().setClickable(true);
+                        viewDelegate.getTvStatus().setText("测试完成，点击重新测试");
                         viewDelegate.getTvStatus().clearDrawable();
                     }else{
                         viewDelegate.getTvStatus().setText(msg.obj.toString());
@@ -198,7 +224,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                         myHandler.sendMessageDelayed(message, 50);
                     }else if(curProgress == 100){
                         addInfo(viewDelegate.getTvSpo2().getText().toString(), viewDelegate.getTvBpm().getText().toString());
-                        myHandler.obtainMessage(0, "测试完成").sendToTarget();
+                        myHandler.obtainMessage(0, "success").sendToTarget();
                         if(ble != null){
                             ble.disConnect();
                         }
