@@ -14,6 +14,63 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/textColor"
+            android:text="姓名"
+            android:inputType="number"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:id="@+id/register_name"
+            android:hint="请填写姓名"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:text="单位"
+            android:inputType="number"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:id="@+id/register_unit"
+            android:hint="请填写单位名称"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
+            android:text="医生ID"
+            android:inputType="number"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:id="@+id/register_doctor_id"
+            android:hint="请填写您的ID号"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/textColor"
             android:text="手机号"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="16dp"/>

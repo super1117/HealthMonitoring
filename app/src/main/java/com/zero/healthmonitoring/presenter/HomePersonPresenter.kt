@@ -48,7 +48,7 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
     override fun bindEvenListener() {
         super.bindEvenListener()
         this.viewDelegate.toolbar?.setNavigationOnClickListener { (this.activity as MainActivity).view_pager_main.setCurrentItem(0, true) }
-        this.viewDelegate.setOnClickListener(this.onClick, R.id.person_spo_record, R.id.person_update_pw, R.id.person_exit)
+        this.viewDelegate.setOnClickListener(this.onClick, R.id.person_spo_record, R.id.person_update_pw, R.id.person_exit, R.id.person_about)
     }
 
     private val onClick = View.OnClickListener {
@@ -71,6 +71,7 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
                 ActivityManager.instance.finishAllActivity()
                 readyGo(LoginPresenter::class.java)
             }
+            R.id.person_about -> readyGo(AboutPresenter::class.java)
         }
     }
 

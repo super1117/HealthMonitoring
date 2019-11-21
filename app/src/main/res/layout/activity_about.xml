@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include layout="@layout/view_title"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="120dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="180dp"
+                android:layout_height="73dp"
+                android:src="@mipmap/icon_logo_h"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="56dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:lineSpacingExtra="3dp"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:textColor="@color/textColor"
+                android:text="        上海崇邦医疗器械有限公司，是一家由中国政府批准许可的专业从事家庭医用氧气供氧服务的服务性外资公司。公司自2006年进入中国上海，为所有有需求的中国家庭，引进当今世界最好的氧疗服务。
+\n        为了对病人的健康和安心着想，我公司是采用美国、香港目前成熟的家庭供氧服务模式，专门为病人提供家庭供氧服务，我们的服务价格合理，比使用钢瓶和买氧气机的费用更经济和实惠。
+\n        我公司选用国外市场上先进的氧气机并与我们优秀的上门供氧服务相结合，使每个住家病人能够在省心、省力、省钱的同时获得优质的氧气，从而使病人自己的身体得到平安和康复。
+\n\n服务电话：021-64279882
+\n监督电话：021-64272667
+\n地址：上海徐汇区南丹东路188号1603室（靠近徐家汇）
+\n网址：www.sunborne-medical.com.cn"
+                android:textIsSelectable="true"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

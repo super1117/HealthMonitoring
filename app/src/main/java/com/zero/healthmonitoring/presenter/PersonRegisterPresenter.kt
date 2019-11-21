@@ -51,37 +51,36 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
     }
 
     private fun getVerifyCode(){
-        if(this.register_mobile.text.toString().isEmpty()){
-            viewDelegate.snakebar("请填写手机号", Prompt.WARNING)
+        if(!isPass()){
+            viewDelegate.snakebar("请将信息填写完整", Prompt.WARNING)
+            return
+        }
+        if(!TextUtils.equals(this.register_password.text.toString(), this.register_password_confirm.text.toString())){
+            viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
             return
         }
         (this.activity as RegisterPresenter).getVerifyCode(this.register_mobile.text.toString())
     }
 
-    private fun onSubmit(){
-        if(this.register_name.text.toString().isEmpty()){
-            return
+    private fun isPass(): Boolean{
+        return when {
+            this.register_name.text.toString().isEmpty() -> return false
+            this.register_age.text.toString().isEmpty() -> return false
+            this.register_doctor_id.text.toString().isEmpty() -> return false
+            this.register_password.text.toString().isEmpty() -> return false
+            this.register_password_confirm.text.toString().isEmpty() -> return false
+            this.register_mobile.text.toString().isEmpty() -> return false
+            else -> true
         }
-        if(this.register_age.text.toString().isEmpty()){
+    }
+
+    private fun onSubmit(){
+        if(!isPass()){
+            viewDelegate.snakebar("请将信息填写完整", Prompt.WARNING)
             return
         }
         if(this.register_verify.text.toString().isEmpty()){
-            return
-        }
-        if(this.register_mobile.text.toString().isEmpty()){
-            return
-        }
-        if(this.register_doctor_id.text.toString().isEmpty()){
-            return
-        }
-        if(this.register_password.text.toString().isEmpty()){
-            return
-        }
-        if(this.register_password_confirm.text.toString().isEmpty()){
-            return
-        }
-        if(!TextUtils.equals(this.register_password.text.toString(), this.register_password_confirm.text.toString())){
-            viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
+            viewDelegate.snakebar("请输入验证码", Prompt.WARNING)
             return
         }
         (this.activity as RegisterPresenter).submit(
