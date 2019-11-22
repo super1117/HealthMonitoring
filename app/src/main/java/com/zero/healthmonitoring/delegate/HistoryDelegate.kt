@@ -53,7 +53,7 @@ class HistoryDelegate : AppDelegate(){
         leftAxis.axisMinimum = 0f
         val bpmLimitLine = LimitLine(60f, "标准脉率")
         bpmLimitLine.textColor = Color.RED
-        bpmLimitLine.enableDashedLine(6f, 3f, 0f)
+        bpmLimitLine.enableDashedLine(4f, 2f, 0f)
         leftAxis.addLimitLine(bpmLimitLine)
         val spoLimitLine = LimitLine(88f, "正常血氧饱和度")
         spoLimitLine.textColor = Color.RED
