@@ -28,11 +28,7 @@
 
         </activity>
         <activity android:name=".presenter.SplashPresenter" android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".presenter.LoginPresenter" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".presenter.RegisterPresenter" android:theme="@style/AppTheme.NoActionBar"/>
@@ -41,7 +37,13 @@
         <activity android:name=".presenter.SpoJavaPresenter" />
         <activity android:name=".presenter.RecordPresenter" />
         <activity android:name=".presenter.PersonDataPresenter"/>
-        <activity android:name=".presenter.HistoryPresenter"/>
+        <activity android:name=".presenter.HistoryPresenter">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".delegate.ForgetPwPresenter"/>
         <activity android:name=".presenter.AboutPresenter"/>
     </application>

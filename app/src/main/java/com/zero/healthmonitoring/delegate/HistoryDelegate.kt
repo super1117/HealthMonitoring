@@ -1,9 +1,11 @@
 package com.zero.healthmonitoring.delegate
 
+import android.graphics.Color
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
@@ -37,30 +39,32 @@ class HistoryDelegate : AppDelegate(){
     }
 
     fun fillDataToChart(data: LineData, count: Int){
-        Log.e("aiya", "count = $count")
         val xAxis = this.ahChart.xAxis
         this.ahChart.setDataMax(count)
+
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        xAxis.typeface = mTf
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(true)
-//        val c = data.dataSets[0].entryCount
-//        xAxis.setLabelCount(count, false)
-//        xAxis.labelRotationAngle = if(count > 12) 45f else 0f
         xAxis.axisMinimum = 0f
 
         val leftAxis = this.ahChart.axisLeft
-//        leftAxis.typeface = mTf
         leftAxis.setLabelCount(5, false)
         leftAxis.axisMaximum = 100f
-        leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
+        leftAxis.axisMinimum = 0f
+        val bpmLimitLine = LimitLine(60f, "标准脉率")
+        bpmLimitLine.textColor = Color.RED
+        bpmLimitLine.enableDashedLine(6f, 3f, 0f)
+        leftAxis.addLimitLine(bpmLimitLine)
+        val spoLimitLine = LimitLine(88f, "正常血氧饱和度")
+        spoLimitLine.textColor = Color.RED
+        spoLimitLine.enableDashedLine(4f, 2f, 0f)
+        leftAxis.addLimitLine(spoLimitLine)
 
         val rightAxis = this.ahChart.axisRight
-//        rightAxis.typeface = mTf
         rightAxis.setLabelCount(5, false)
         rightAxis.setDrawGridLines(false)
         rightAxis.axisMaximum = 100f
-        rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
+        rightAxis.axisMinimum = 0f
 
         this.ahChart.data = data
         this.ahChart.animateX(750)
