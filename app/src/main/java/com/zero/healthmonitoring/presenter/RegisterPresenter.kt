@@ -13,10 +13,11 @@ class RegisterPresenter : BasePresenter<RegisterDelegate>(){
         this.supportActionBar?.title = "注册"
     }
 
-    fun submit(name: String, age: String, mobile: String, code: String, docid: String?, pw: String){
+    fun submit(name: String, age: String, unit: String, mobile: String, code: String, docid: String?, pw: String){
         val params = HashMap<String, String?>()
         params["name"] = name
         params["age"] = age
+        params["company"] = unit
         params["type"] = "1"
         params["mobile"] = mobile
         params["code"] = code

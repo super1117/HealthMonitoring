@@ -86,6 +86,7 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
         (this.activity as RegisterPresenter).submit(
             this.register_name.text.toString(),
             this.register_age.text.toString(),
+            "",
             this.register_mobile.text.toString(),
             this.register_verify.text.toString(),
             this.register_doctor_id.text.toString(),
