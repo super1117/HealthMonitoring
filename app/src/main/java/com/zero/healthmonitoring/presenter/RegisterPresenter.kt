@@ -13,7 +13,7 @@ class RegisterPresenter : BasePresenter<RegisterDelegate>(){
         this.supportActionBar?.title = "注册"
     }
 
-    fun submit(name: String, age: String, unit: String, mobile: String, code: String, docid: String?, pw: String){
+    fun submit(name: String, age: String, unit: String, mobile: String, code: String, docid: String?, pw: String, type: String){
         val params = HashMap<String, String?>()
         params["name"] = name
         params["age"] = age
@@ -23,6 +23,7 @@ class RegisterPresenter : BasePresenter<RegisterDelegate>(){
         params["code"] = code
         params["docid"] = docid
         params["pwd"] = pw
+        params["utype"] = type
         SystemApi.provideService()
             .registerOrForget(params)
             .compose(RxHelper.applySchedulers())

@@ -60,6 +60,19 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
             viewDelegate.snakebar("请将信息填写完整", Prompt.WARNING)
             return
         }
+        if(!this.register_doctor_id.text.toString().startsWith("SB00")){
+            viewDelegate.snakebar("无效的ID号", Prompt.WARNING)
+            return
+        }
+        val id = try{
+            this.register_doctor_id.text.toString().split("SB00")[1].toInt()
+        }catch (e : Exception){
+            -1
+        }
+        if(id < 0 || id > 30){
+            viewDelegate.snakebar("无效的ID号", Prompt.WARNING)
+            return
+        }
         if(!TextUtils.equals(this.register_password_confirm.text.toString(), this.register_password.text.toString())){
             viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
             return
@@ -87,6 +100,19 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
             viewDelegate.snakebar("请将信息填写完整", Prompt.WARNING)
             return
         }
+        if(!this.register_doctor_id.text.toString().startsWith("SB00")){
+            viewDelegate.snakebar("无效的ID号", Prompt.WARNING)
+            return
+        }
+        val id = try{
+            this.register_doctor_id.text.toString().split("SB00")[1].toInt()
+        }catch (e : Exception){
+            -1
+        }
+        if(id < -1 || id > 30){
+            viewDelegate.snakebar("无效的ID号", Prompt.WARNING)
+            return
+        }
         if(!TextUtils.equals(this.register_password_confirm.text.toString(), this.register_password.text.toString())){
             viewDelegate.snakebar("两次密码输入不一致", Prompt.WARNING)
             return
@@ -106,7 +132,8 @@ class DoctorRegisterPresenter : BaseFragmentPresenter<DoctorRegisterDelegate>() 
             this.register_mobile.text.toString(),
             this.register_verify.text.toString(),
             this.register_doctor_id.text.toString(),
-            this.register_password.text.toString())
+            this.register_password.text.toString(),
+            "1")
     }
 
 }

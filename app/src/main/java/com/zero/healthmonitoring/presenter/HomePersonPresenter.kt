@@ -42,7 +42,7 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
 
     override fun doMain() {
         this.viewDelegate.toolbar?.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-        this.person_spo_record.text = if(this.user?.is_doctor?:0 == 1) "使用者数据" else "血氧历史记录"
+        this.person_spo_record.text = if(this.user?.utype?:0 == 1) "使用者数据" else "血氧历史记录"
     }
 
     override fun bindEvenListener() {
@@ -54,7 +54,7 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
     private val onClick = View.OnClickListener {
         when(it.id){
             R.id.person_spo_record -> {
-                if(this.user?.is_doctor?:0 == 1){
+                if(this.user?.utype?:0 == 1){
 //                    readyGo(PersonDataPresenter::class.java)
                     (activity as MainActivity).view_pager_main.setCurrentItem(0, true)
                 }else{

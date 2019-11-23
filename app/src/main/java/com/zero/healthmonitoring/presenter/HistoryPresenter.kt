@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -47,11 +48,14 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 
     private lateinit var userId: String
 
+    private lateinit var userName: String
+
 
     override fun doMain() {
         this.supportActionBar?.title = "历史记录"
         this.list = this.viewDelegate.adapter.data
         this.userId = this.intent.getStringExtra("uid")?:(this.user?.uid?:"")
+        this.userName = this.intent.getStringExtra("userName")?:this.user?.name?:""
 
         this.ah_year.prompt = "年"
         this.ah_month.prompt = "月"
@@ -131,6 +135,12 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
             }
 
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val flag = super.onCreateOptionsMenu(menu)
+        menu?.getItem(0)?.title = this.userName
+        return flag
     }
 
     /**

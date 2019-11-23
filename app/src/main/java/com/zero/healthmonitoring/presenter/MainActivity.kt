@@ -17,7 +17,7 @@ import kotlin.system.exitProcess
 class MainActivity : BasePresenter<MainDelegate>() {
 
     override fun doMain() {
-        this.view_navigation_main.menu[0].title = if(this.user?.is_doctor?:0 == 1) "使用者数据" else "数据"
+        this.view_navigation_main.menu[0].title = if(this.user?.utype?:0 == 1) "使用者数据" else "数据"
         this.getConfig()
     }
 
@@ -34,7 +34,7 @@ class MainActivity : BasePresenter<MainDelegate>() {
 //            }
 //            false
 //        }
-        if(this.user?.is_doctor != 1){
+        if(this.user?.utype != 1){
             this.view_navigation_main.setOnNavigationItemReselectedListener {
                 if(it.itemId == R.id.nav_home){
                     start(HistoryPresenter::class.java)

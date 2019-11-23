@@ -64,7 +64,7 @@ class MainDelegate : AppDelegate(){
         val nav = this.get<BottomNavigationView>(R.id.view_navigation_main)
         nav.setOnNavigationItemSelectedListener(this.mOnNavigationItemSelectedListener)
         user = GsonUtil.setJsonToBean(SPUtil.get(getActivity(), "user", "").toString(), UserBean::class.java)
-        if (user?.is_doctor == 1){
+        if (user?.utype == 1){
             fragments.add(PersonDataPresenter())
         }else{
             this.fragments.add(SpoJavaPresenter())
@@ -115,7 +115,7 @@ class MainDelegate : AppDelegate(){
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.nav_home -> {
-                if(user?.is_doctor == 1){
+                if(user?.utype == 1){
                 contentPager.currentItem = 0
                 }else{
                     getActivity<Activity>().startActivity(Intent(getActivity(), HistoryPresenter::class.java))

@@ -12,5 +12,5 @@ class UserBean{
 
     var age: Int? = null
 
-    var is_doctor: Int? = null
+    var utype: Int? = null
 }

@@ -90,7 +90,8 @@ class PersonRegisterPresenter : BaseFragmentPresenter<PersonRegisterDelegate>() 
             this.register_mobile.text.toString(),
             this.register_verify.text.toString(),
             this.register_doctor_id.text.toString(),
-            this.register_password.text.toString())
+            this.register_password.text.toString(),
+            "0")
     }
 
 }

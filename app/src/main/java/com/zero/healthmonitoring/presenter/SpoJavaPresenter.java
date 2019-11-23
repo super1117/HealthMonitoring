@@ -55,7 +55,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
     private FingerOximeter pod;
 
-    private boolean isFindDeivce;
+    private boolean isFindDevice;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -65,7 +65,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
             if (action.equals(BluetoothDevice.ACTION_FOUND)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (TextUtils.equals(device.getName(), "POD")) {
-                    isFindDeivce = true;
+                    isFindDevice = true;
                     if (myHandler != null) {
                         myHandler.obtainMessage(0, "开始连接").sendToTarget();
                     }
@@ -83,7 +83,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                     }
                 }
             } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
-                if (!isFindDeivce) {
+                if (!isFindDevice) {
                     myHandler.obtainMessage(0, "未找到可连接设备").sendToTarget();
                 }
             }
@@ -93,6 +93,8 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
     @Override
     public void doMain() {
         this.viewDelegate.getToolbar().setTitle("血氧测试");
+        this.viewDelegate.getToolbar().inflateMenu(this.viewDelegate.getOptionMenuId());
+        this.viewDelegate.getToolbar().getMenu().getItem(0).setTitle(this.getUser().getName());
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         this.permissionManager = new PermissionManager(this.getActivity(), this);
         if (!this.permissionManager.isRequestPermissions(
@@ -134,7 +136,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
             this.bluetoothAdapter.enable();
         }
         this.viewDelegate.getRootView().postDelayed(() -> {
-            if (bluetoothAdapter.isEnabled()) {
+            if (this.bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
                 try {
                     ble = new BLEOpertion(getActivity(), new BleCallBack());
                     myHandler.obtainMessage(0, "正在搜索设备...").sendToTarget();
@@ -221,10 +223,6 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                         myHandler.sendMessageDelayed(message, 50);
                     } else if (curProgress == 100) {
                         addInfo(viewDelegate.getTvSpo2().getText().toString(), viewDelegate.getTvBpm().getText().toString());
-                        myHandler.obtainMessage(0, "success").sendToTarget();
-                        if (ble != null) {
-                            ble.disConnect();
-                        }
                     }
                     break;
                 default:
@@ -349,12 +347,24 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                 .subscribe(new RxSubscribe<String>(this.viewDelegate, true) {
                     @Override
                     protected void _onNext(String t) {
+                        if(myHandler != null){
+                            myHandler.obtainMessage(0, "success").sendToTarget();
+                        }
+                        if (ble != null) {
+                            ble.disConnect();
+                        }
                         viewDelegate.snakebar("已提交", Prompt.SUCCESS);
                     }
 
                     @Override
                     protected void _onError(String message) {
-
+                        if(myHandler != null){
+                            myHandler.obtainMessage(0, "success").sendToTarget();
+                        }
+                        if (ble != null) {
+                            ble.disConnect();
+                        }
+                        viewDelegate.snakebar("提价失败，请重新测试", Prompt.ERROR);
                     }
                 });
     }

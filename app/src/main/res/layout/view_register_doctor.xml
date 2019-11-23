@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="43dp"
             android:id="@+id/register_doctor_id"
-            android:hint="请填写您的ID号"
+            android:hint="请填写您的ID号(例：SB0001)"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textSize="14sp"/>
@@ -84,14 +84,6 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textSize="14sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="@color/gray"
-            android:layout_marginLeft="20dp"
-            android:text="密码必须由6~16位英文字母及数字组成"/>
 
         <TextView
             android:layout_width="wrap_content"

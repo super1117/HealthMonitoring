@@ -69,4 +69,6 @@ class HistoryDelegate : AppDelegate(){
         this.ahChart.data = data
         this.ahChart.animateX(750)
     }
+
+    override fun getOptionMenuId(): Int = R.menu.menu_right_txt
 }

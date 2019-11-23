@@ -29,4 +29,6 @@ class SpoDelegate : AppDelegate() {
         this.tvSeek = this.get(R.id.tv_seek)
         this.spoSeek.setOnTouchListener { _, _ ->  true}
     }
+
+    override fun getOptionMenuId(): Int = R.menu.menu_right_txt
 }

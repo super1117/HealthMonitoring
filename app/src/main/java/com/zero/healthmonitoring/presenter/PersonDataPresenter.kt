@@ -55,6 +55,7 @@ class PersonDataPresenter : BaseFragmentPresenter<PersonDataDelegate>(){
         this.viewDelegate.adapter.setOnItemClickListener { _, _, position ->
             val data = Bundle()
             data.putString("uid", list[position].uid)
+            data.putString("userName", list[position].name)
             readyGo(HistoryPresenter::class.java, data)
         }
     }
