@@ -43,7 +43,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
     private final static int PERMISSION_RESULT_CODE = 0x100;
 
-    private final static long TEST_TOTAL_TIME = 5500;
+    private final static long TEST_TOTAL_TIME = 11 * 1000;
 
     private long currentTime = 0;
 
@@ -56,6 +56,8 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
     private FingerOximeter pod;
 
     private boolean isFindDevice;
+
+    private boolean isConnected = true;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -220,9 +222,17 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                         Message message = new Message();
                         message.what = 4;
                         message.obj = (cur - currentTime) * 100 / TEST_TOTAL_TIME;
-                        myHandler.sendMessageDelayed(message, 50);
+                        myHandler.sendMessageDelayed(message, isConnected ? 50 : 10);
                     } else if (curProgress == 100) {
-                        addInfo(viewDelegate.getTvSpo2().getText().toString(), viewDelegate.getTvBpm().getText().toString());
+                        try{
+                            if(Integer.parseInt(viewDelegate.getTvSpo2().getText().toString()) == 0 ||
+                                    Integer.parseInt(viewDelegate.getTvBpm().getText().toString()) == 0){
+                                return;
+                            }
+                            addInfo(viewDelegate.getTvSpo2().getText().toString(), viewDelegate.getTvBpm().getText().toString());
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 default:
@@ -234,6 +244,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        this.isConnected = false;
         if (ble != null) {
             ble.disConnect();
         }
@@ -272,10 +283,12 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                 pod.Start();
                 pod.SetWaveAction(true);
             }
+            isConnected = true;
         }
 
         @Override
         public void onConnectFail() {
+            isConnected = false;
             if (myHandler != null) {
                 myHandler.obtainMessage(0, "连接失败").sendToTarget();
             }
@@ -291,6 +304,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
         @Override
         public void onDisConnect(ACSUtility.blePort blePort) {
+            isConnected = false;
             if (myHandler != null) {
                 myHandler.obtainMessage(0, "disconnect").sendToTarget();
                 pod.Stop();
