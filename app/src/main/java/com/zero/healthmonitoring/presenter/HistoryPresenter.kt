@@ -192,7 +192,7 @@ class HistoryPresenter : BasePresenter<HistoryDelegate>(){
 //            }
 //        }
 
-        val d1 = LineDataSet(values1, "Spo2")
+        val d1 = LineDataSet(values1, "SpO2")
         d1.lineWidth = 1.8f
         d1.circleRadius = 3.2f
 //        d1.highLightColor = Color.rgb(244, 117, 117)

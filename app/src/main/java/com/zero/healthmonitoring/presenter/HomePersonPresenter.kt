@@ -67,7 +67,7 @@ class HomePersonPresenter : BaseFragmentPresenter<HomePersonDelegate>(){
                 readyGo(ForgetPwPresenter::class.java, data)
             }
             R.id.person_exit -> {
-                SPUtil.remove(activity, "user")
+                SPUtil.remove(activity, "login")
                 ActivityManager.instance.finishAllActivity()
                 readyGo(LoginPresenter::class.java)
             }

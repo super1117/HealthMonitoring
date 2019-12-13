@@ -13,4 +13,6 @@ class UserBean{
     var age: Int? = null
 
     var utype: Int? = null
+
+    var pwd: String? = null
 }

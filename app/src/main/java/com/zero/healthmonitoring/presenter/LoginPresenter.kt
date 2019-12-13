@@ -20,6 +20,10 @@ class LoginPresenter : BasePresenter<LoginDelegate>(){
     override fun doMain() {
 //        this.login_account.setText("123")
 //        this.login_password.setText("123456")
+        this.user?.apply{
+            login_account.setText(mobile?: "")
+            login_password.setText(pwd?:"")
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -59,7 +63,9 @@ class LoginPresenter : BasePresenter<LoginDelegate>(){
             .compose(RxHelper.applySchedulers())
             .subscribe(object: RxSubscribe<UserBean>(this.viewDelegate, true){
                 override fun _onNext(t: UserBean?) {
+                    t?.pwd = login_password.text.toString()
                     SPUtil.put(this@LoginPresenter, "user", GsonUtil.setBeanToJson(t))
+                    SPUtil.put(this@LoginPresenter, "login", true)
                     start(MainActivity::class.java)
                     finish()
                 }
