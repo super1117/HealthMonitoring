@@ -13,11 +13,11 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 
 import com.bde.parentcyTransport.ACSUtility;
-import com.bde.parentcyTransport.ACSUtility.blePort;
 import com.creative.FingerOximeter.FingerOximeter;
 import com.creative.FingerOximeter.IFingerOximeterCallBack;
 import com.creative.base.BLEReader;
@@ -36,6 +36,7 @@ import com.zero.library.widget.DrawableView;
 import com.zero.library.widget.snakebar.Prompt;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -54,10 +55,16 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
     private BLEOpertion ble;
 
     private FingerOximeter pod;
-
+    //是否找到设备
     private boolean isFindDevice;
-
+    //设备是否连接
     private boolean isConnected = true;
+    //是否已提交测试数据
+    private boolean isSubmit;
+    //是否正在接收设备数据
+    private boolean isReceivingData;
+    //进度条的当前进度值
+    private int curSeek;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -86,7 +93,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                 }
             } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
                 if (!isFindDevice) {
-                    myHandler.obtainMessage(0, "未找到可连接设备").sendToTarget();
+                    myHandler.obtainMessage(0, "NoFindDevice").sendToTarget();
                 }
             }
         }
@@ -116,6 +123,22 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
     protected void bindEvenListener() {
         super.bindEvenListener();
         viewDelegate.setOnClickListener(this.onClickListener, R.id.tv_status);
+        viewDelegate.getSpoSeek().setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                viewDelegate.getTvSeek().setText(progress + "%");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -124,6 +147,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tv_status:
+                    curSeek = 0;
                     myHandler.obtainMessage(0, "正在搜索设备...").sendToTarget();
                     myHandler.sendEmptyMessageDelayed(2, 3000);
                     break;
@@ -175,14 +199,27 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                         currentTime = System.currentTimeMillis();
                         viewDelegate.getTvStatus().setText("设备已连接");
                         viewDelegate.getTvStatus().setDrawableResource(R.drawable.ic_check_circle_24dp, DrawableView.DrawablePosition.RIGHT);
-                        myHandler.sendEmptyMessage(4);
                     } else if (TextUtils.equals(msg.obj.toString(), "disconnect")) {
-                        viewDelegate.getTvStatus().setText("设备已断开");
+                        if(isSubmit){
+                            viewDelegate.getTvStatus().setClickable(true);
+                            viewDelegate.getTvStatus().setText("测试完成，点击重新测试");
+                            isSubmit = false;
+                        }else{
+                            viewDelegate.getTvStatus().setText("设备已断开");
+                        }
                         viewDelegate.getTvStatus().clearDrawable();
-                    } else if (TextUtils.equals(msg.obj.toString(), "success")) {
+                    } else if(TextUtils.equals(msg.obj.toString(), "ConnectFail")){
+                        viewDelegate.getTvStatus().setClickable(true);
+                        viewDelegate.getTvStatus().setText("连接断开，点击重新测试");
+                        viewDelegate.getTvStatus().clearDrawable();
+                    }else if (TextUtils.equals(msg.obj.toString(), "success")) {
                         viewDelegate.getTvStatus().setClickable(true);
                         viewDelegate.getTvStatus().setText("测试完成，点击重新测试");
                         viewDelegate.getTvStatus().clearDrawable();
+                    } else if(TextUtils.equals(msg.obj.toString(), "NoFindDevice")){
+                      viewDelegate.getTvStatus().setText("未找到可连接设备");
+                      viewDelegate.getTvStatus().setClickable(true);
+                      viewDelegate.getTvStatus().setDrawableResource(R.drawable.ic_settings_backup_restore_black_24dp, DrawableView.DrawablePosition.RIGHT);
                     } else {
                         viewDelegate.getTvStatus().setText(msg.obj.toString());
                         viewDelegate.getTvStatus().clearDrawable();
@@ -195,11 +232,25 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 //                        BaseDate.Wave w = iterator.next();
 //                        showText += w.data + "---";
 //                    }
-//                    viewDelegate.getWave().setText(showText);
+//                    Log.e("aiya", "waves   ************************* " + showText);
+                    curSeek += 10;
+                    if(curSeek <= 100){
+                        viewDelegate.getSpoSeek().setProgress(curSeek);
+                        if(curSeek == 100){
+                            try{
+                                if(Integer.parseInt(viewDelegate.getTvSpo2().getText().toString()) == 0 ||
+                                        Integer.parseInt(viewDelegate.getTvBpm().getText().toString()) == 0){
+                                    return;
+                                }
+                                addInfo(viewDelegate.getTvSpo2().getText().toString(), viewDelegate.getTvBpm().getText().toString());
+                            }catch (Exception e){
+                                viewDelegate.getSpoSeek().setProgress(0);
+                                e.printStackTrace();
+                            }
+                        }
+                    }
                     break;
                 case 2:
-//                    ble.startDiscover();
-//                    ble.connect("84:EB:18:78:43:3E");
                     if (bluetoothAdapter != null) {
                         bluetoothAdapter.startDiscovery();
                     }
@@ -216,7 +267,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                     } else {
                         viewDelegate.getSpoSeek().setProgress(curProgress > 100 ? 100 : curProgress);
                     }
-                    viewDelegate.getTvSeek().setText(viewDelegate.getSpoSeek().getProgress() + "%");
+
                     long cur = System.currentTimeMillis();
                     if (curProgress < 100) {
                         Message message = new Message();
@@ -290,7 +341,7 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
         public void onConnectFail() {
             isConnected = false;
             if (myHandler != null) {
-                myHandler.obtainMessage(0, "连接失败").sendToTarget();
+                myHandler.obtainMessage(0, "ConnectFail").sendToTarget();
             }
             if (pod != null)
                 pod.Stop();
@@ -322,26 +373,31 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
 
         @Override
         public void OnGetSpO2Param(int nSpO2, int nPR, float nPI, boolean nStatus, int nMode, float nPower) {
+//            if(!isReceivingData){
+//                isReceivingData = false;
+//                myHandler.sendEmptyMessage(4);
+//            }
             if (myHandler != null) {
+                myHandler.sendEmptyMessage(1);
                 myHandler.obtainMessage(3, nSpO2 + " " + nPR).sendToTarget();
             }
         }
 
         @Override
         public void OnGetSpO2Wave(List<BaseDate.Wave> wave) {
-            if (myHandler != null) {
-                myHandler.obtainMessage(1, wave).sendToTarget();
-            }
+//            if (myHandler != null) {
+//                myHandler.obtainMessage(1, wave).sendToTarget();
+//            }
         }
 
         @Override
         public void OnGetDeviceVer(int i, int i1, int i2, int i3) {
-
+            Log.e("aiya", i + "  " + i1 + "  " + i2 + "  " + i3);
         }
 
         @Override
         public void OnConnectLose() {
-
+            Log.e("aiya", "OnConnectLose");
         }
     }
 
@@ -361,24 +417,23 @@ public class SpoJavaPresenter extends BaseFragmentPresenter<SpoDelegate> {
                 .subscribe(new RxSubscribe<String>(this.viewDelegate, true) {
                     @Override
                     protected void _onNext(String t) {
-                        if(myHandler != null){
-                            myHandler.obtainMessage(0, "success").sendToTarget();
-                        }
+                        isSubmit = true;
                         if (ble != null) {
                             ble.disConnect();
                         }
-                        viewDelegate.snakebar("已提交", Prompt.SUCCESS);
+                        if(viewDelegate != null){
+                            viewDelegate.snakebar("已提交", Prompt.SUCCESS);
+                        }
                     }
 
                     @Override
                     protected void _onError(String message) {
-                        if(myHandler != null){
-                            myHandler.obtainMessage(0, "success").sendToTarget();
-                        }
                         if (ble != null) {
                             ble.disConnect();
                         }
-                        viewDelegate.snakebar("提价失败，请重新测试", Prompt.ERROR);
+                        if(viewDelegate != null){
+                            viewDelegate.snakebar("提交失败，请重新测试", Prompt.ERROR);
+                        }
                     }
                 });
     }
